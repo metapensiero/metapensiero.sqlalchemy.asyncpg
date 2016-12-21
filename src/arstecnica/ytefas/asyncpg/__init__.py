@@ -24,10 +24,10 @@ def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
     When `stmt` is a SQLAlchemy :class:`Executable
     <sqlalchemy.sql.base.Executable>` it is compiled to its raw SQL using a
     custom SA :class:`dialect <.PGDialect_asyncpg>` to produce a syntax
-    compatible with asyncpg (in particular, using ``$1``, ``$2`` and so as the
-    parametric placeholders) and it's parameters collected in a tuple, picking
-    named parameters (when using :func:`sqlalchemy.bindparam` for example)
-    from the `named_args` dictionary.
+    compatible with asyncpg (in particular, using ``$1``, ``$2`` and so on as
+    the parametric placeholders) and it's parameters collected in a tuple,
+    picking named parameters (when using :func:`sqlalchemy.bindparam` for
+    example) from the `named_args` dictionary.
 
     The result is suitable to be passed to the various methods of asyncpg's
     connection for execution.
