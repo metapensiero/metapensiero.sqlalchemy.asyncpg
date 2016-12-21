@@ -139,8 +139,8 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     The `stmt` is first compiled with :func:`.compile` and then executed on
     the `apgconn` connection with the needed parameters. A particular column
-    of the first row (specified positionally by the keyword `column`, by
-    default the first) is finally returned.
+    of the first row (specified positionally with the keyword `column`, by
+    default ``0`` to mean the first) is finally returned.
 
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.fetchval

@@ -10,16 +10,24 @@ import sqlalchemy as sa
 import pytest
 
 from arstecnica.ytefas import asyncpg
-from arstecnica.ytefas.model.tables import auth as auth_tables
+from arstecnica.ytefas.model.tables.auth import users
 
 
 
 @pytest.mark.asyncio
 async def test_scalar(pool):
-    q = sa.select([auth_tables.users.c.email]) \
-        .where(auth_tables.users.c.name == 'segretaria_ca')
+    q = sa.select([users.c.email]) \
+        .where(users.c.name == 'segretaria_ca')
     async with pool.acquire() as conn:
         assert await asyncpg.scalar(conn, q) == 'segre@ca.it'
+
+
+@pytest.mark.asyncio
+async def test_scalar_2nd_column(pool):
+    q = sa.select([users.c.name, users.c.email]) \
+        .where(users.c.name == 'segretaria_ca')
+    async with pool.acquire() as conn:
+        assert await asyncpg.scalar(conn, q, column=1) == 'segre@ca.it'
 
 
 @pytest.mark.asyncio
@@ -33,8 +41,8 @@ async def test_scalar_named_args(pool):
 
 @pytest.mark.asyncio
 async def test_fetchall(pool):
-    q = sa.select([auth_tables.users]) \
-        .where(auth_tables.users.c.email.like('%@ca.it'))
+    q = sa.select([users]) \
+        .where(users.c.email.like('%@ca.it'))
     async with pool.acquire() as conn:
         result = await asyncpg.fetchall(conn, q)
         assert isinstance(result, list)
@@ -43,8 +51,8 @@ async def test_fetchall(pool):
 
 @pytest.mark.asyncio
 async def test_fetchone(pool):
-    q = sa.select([auth_tables.users]) \
-        .where(auth_tables.users.c.email.like('%@ca.it'))
+    q = sa.select([users]) \
+        .where(users.c.email.like('%@ca.it'))
     async with pool.acquire() as conn:
         result = await asyncpg.fetchone(conn, q)
         assert type(result).__name__ == 'Record'
