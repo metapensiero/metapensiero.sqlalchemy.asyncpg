@@ -16,3 +16,9 @@ SQLAlchemy adaptor for asyncpg
  :author: Lele Gaifax
  :contact: lele@arstecnica.it
  :license: No license
+
+Implement the ability of executing SQLAlchemy core statements through
+asyncpg__, in a much cleaner way than asyncpgsa__.
+
+__ https://github.com/MagicStack/asyncpg
+__ https://github.com/CanopyTax/asyncpgsa

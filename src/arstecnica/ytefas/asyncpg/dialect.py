@@ -14,6 +14,12 @@ compiler.BIND_TEMPLATES['numeric'] = '$[_POSITION]'
 
 
 class PGDialect_asyncpg(PGDialect_psycopg2):
+    """Custom SA PostgreSQL dialect compatible with asyncpg.
+
+    In particular it uses a variant of the ``numeric`` `paramstyle`, to
+    produce placeholders like ``$1``, ``$2`` and so on.
+    """
+
     def __init__(self, *args, **kwargs):
         kwargs['paramstyle'] = 'numeric'
         super().__init__(*args, **kwargs)
