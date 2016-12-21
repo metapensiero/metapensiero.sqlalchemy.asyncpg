@@ -44,8 +44,7 @@ def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
 async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """Execute the given statement on a asyncpg connection.
 
-    :param apgconn: an asyncpg :class:`Connection
-                    <asyncpg.connection.Connection>` instance
+    :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
     :param pos_args: a possibly empty sequence of positional arguments
     :param named_args: a possibly empty mapping of named arguments
@@ -55,7 +54,8 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     The `stmt` is first compiled with :func:`.compile` and then executed on
     the `apgconn` connection with the needed parameters.
 
-    __ https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.connection.Connection.execute
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.execute
     """
 
     sql, args = compile(stmt, pos_args, named_args)
@@ -65,14 +65,14 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 async def prepare(apgconn, stmt, **kwargs):
     """Create a `prepared statement`__.
 
-    :param apgconn: an asyncpg :class:`Connection
-                    <asyncpg.connection.Connection>` instance
+    :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
     :param \*\*kwargs: any valid `prepare()`__ keyword argument
     :return: a string with the status of the last instruction
 
-    __ https://magicstack.github.io/asyncpg/current/api/index.html#prepared-statements
-    __ https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.connection.Connection.prepare
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#prepared-statements
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.prepare
     """
 
     sql, args = compile(stmt)
@@ -82,8 +82,7 @@ async def prepare(apgconn, stmt, **kwargs):
 async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """Execute the given statement on a asyncpg connection and return resulting records.
 
-    :param apgconn: an asyncpg :class:`Connection
-                    <asyncpg.connection.Connection>` instance
+    :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
     :param pos_args: a possibly empty sequence of positional arguments
     :param named_args: a possibly empty mapping of named arguments
@@ -94,8 +93,9 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     the `apgconn` connection with the needed parameters. It's whole resultset
     is finally returned.
 
-    __ https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.connection.Connection.fetch
-    __ https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.Record
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.fetch
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.Record
     """
 
     sql, args = compile(stmt, pos_args, named_args)
@@ -106,8 +106,7 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """Execute the given statement on a asyncpg connection and return the first
     row.
 
-    :param apgconn: an asyncpg :class:`Connection
-                    <asyncpg.connection.Connection>` instance
+    :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
     :param pos_args: a possibly empty sequence of positional arguments
     :param named_args: a possibly empty mapping of named arguments
@@ -118,8 +117,9 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     the `apgconn` connection with the needed parameters. The first row of it's
     result is finally returned.
 
-    __ https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.connection.Connection.fetchrow
-    __ https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.Record
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.fetchrow
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.Record
     """
 
     sql, args = compile(stmt, pos_args, named_args)
@@ -130,8 +130,7 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """Execute the given statement on a asyncpg connection and return a single
     column of the first row.
 
-    :param apgconn: an asyncpg :class:`Connection
-                    <asyncpg.connection.Connection>` instance
+    :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
     :param pos_args: a possibly empty sequence of positional arguments
     :param named_args: a possibly empty mapping of named arguments
@@ -143,8 +142,9 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     of the first row (specified positionally by the keyword `column`, by
     default the first) is finally returned.
 
-    __ https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.connection.Connection.fetchval
-    __ https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.Record
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.fetchval
+    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.Record
     """
 
     sql, args = compile(stmt, pos_args, named_args)
