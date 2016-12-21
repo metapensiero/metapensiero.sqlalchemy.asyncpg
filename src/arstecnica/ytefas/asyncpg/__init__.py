@@ -34,7 +34,7 @@ def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
     """
 
     if isinstance(stmt, str):
-        return stmt, tuple(pos_args) if pos_args is None else ()
+        return stmt, tuple(pos_args) if pos_args is not None else ()
     else:
         compiled = stmt.compile(dialect=_d)
         params = compiled.construct_params(named_args)
