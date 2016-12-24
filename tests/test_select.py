@@ -31,7 +31,8 @@ async def test_scalar_2nd_column(pool):
 
 @pytest.mark.asyncio
 async def test_scalar_named_args(pool):
-    q = sa.select([sa.text('auth.login(:user, :password)')])
+    q = sa.select([sa.text('user_id')],
+                  from_obj=sa.text('auth.login(:user, :password)'))
     async with pool.acquire() as conn:
         assert await asyncpg.scalar(conn, q,
                                     named_args=dict(user='admin',
