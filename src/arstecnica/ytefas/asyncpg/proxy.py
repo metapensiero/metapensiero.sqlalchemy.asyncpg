@@ -40,7 +40,8 @@ class AsyncpgProxiedQuery(ProxiedQuery):
             rows = await fetchall(session, query, named_args=self.params)
             if asdict:
                 fn2key = dict((c.name, c.key) for c in self.getColumns(query))
-                result = [dict((fn2key[fn], r[fn]) for fn in fn2key) for r in rows]
+                result = [dict((fn2key[fn], r[fn]) for fn in fn2key)
+                          for r in rows]
             else:
                 result = rows
         else:
@@ -53,7 +54,9 @@ class AsyncpgProxiedQuery(ProxiedQuery):
         (query, result, asdict,
          resultslot, successslot, messageslot, countslot, metadataslot,
          sort, dir,
-         start, limit) = self.prepareQueryFromConditionsAndArgs(session, conditions, args)
+         start, limit) = self.prepareQueryFromConditionsAndArgs(session,
+                                                                conditions,
+                                                                args)
 
         try:
             if limit != 0:
