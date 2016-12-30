@@ -51,6 +51,9 @@ class AsyncpgProxiedQuery(ProxiedQuery):
     async def __call__(self, session, *conditions, **args):
         "Async reimplementation of superclass' ``__call__()``."
 
+        # TODO: hook a translator as self.translate(), once we are able to
+        # reach the app or even better the new "user" node
+
         (query, result, asdict,
          resultslot, successslot, messageslot, countslot, metadataslot,
          sort, dir,
