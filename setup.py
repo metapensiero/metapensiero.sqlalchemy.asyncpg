@@ -3,7 +3,7 @@
 # :Created:   Tue 20 Dec 2016 21:17:12 CET
 # :Author:    Lele Gaifax <lele@arstecnica.it>
 # :License:   No license
-# :Copyright: © 2016 Arstecnica s.r.l.
+# :Copyright: © 2016, 2017 Arstecnica s.r.l.
 #
 
 from io import open
@@ -25,7 +25,7 @@ setup(
     url="https://gitlab.com/arstecnica/ytefas.git",
 
     description="SQLAlchemy adaptor for asyncpg",
-    long_description=README + u'\n\n' + CHANGES,
+    long_description=README + '\n\n' + CHANGES,
 
     author="Lele Gaifax",
     author_email="lele@arstecnica.it",
@@ -47,6 +47,7 @@ setup(
 
     install_requires=[
         'asyncpg',
+        'metapensiero.sqlalchemy.proxy',
         'setuptools',
         'sqlalchemy',
     ],
