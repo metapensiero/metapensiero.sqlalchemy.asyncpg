@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   Ytefas -- pytest configuration
+# :Project:   arstecnica.ytefas.asyncpg -- pytest configuration
 # :Created:   mer 21 dic 2016 12:37:39 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License

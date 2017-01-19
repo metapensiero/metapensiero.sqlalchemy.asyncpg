@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# :Project:   Ytefas -- See https://github.com/MagicStack/asyncpg/issues/32
+# :Project:   arstecnica.ytefas.asyncpg -- See https://github.com/MagicStack/asyncpg/issues/32
 # :Created:   gio 22 dic 2016 11:27:52 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
-# :Copyright: © 2016 Arstecnica s.r.l.
+# :Copyright: © 2016, 2017 Arstecnica s.r.l.
 #
 
 from datetime import date, timedelta

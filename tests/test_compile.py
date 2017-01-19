@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# :Project:   Ytefas -- Tests for the compile() function
+# :Project:   arstecnica.ytefas.asyncpg -- Tests for the compile() function
 # :Created:   mer 21 dic 2016 12:40:11 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
-# :Copyright: © 2016 Arstecnica s.r.l.
+# :Copyright: © 2016, 2017 Arstecnica s.r.l.
 #
 
 import sqlalchemy as sa

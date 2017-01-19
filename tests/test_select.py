@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# :Project:   Ytefas -- Test various select functions
+# :Project:   arstecnica.ytefas.asyncpg -- Test various select functions
 # :Created:   mer 21 dic 2016 13:23:19 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
-# :Copyright: © 2016 Arstecnica s.r.l.
+# :Copyright: © 2016, 2017 Arstecnica s.r.l.
 #
 
 import sqlalchemy as sa
