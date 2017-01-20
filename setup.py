@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.ytefas.asyncpg -- SQLAlchemy adaptor for asyncpg
+# :Project:   arstecnica.utils.asyncpg -- SQLAlchemy adaptor for asyncpg
 # :Created:   Tue 20 Dec 2016 21:17:12 CET
 # :Author:    Lele Gaifax <lele@arstecnica.it>
 # :License:   No license
@@ -20,7 +20,7 @@ with open(os.path.join(here, 'version.txt'), encoding='utf-8') as f:
     VERSION = f.read().strip()
 
 setup(
-    name="arstecnica.ytefas.asyncpg",
+    name="arstecnica.utils.asyncpg",
     version=VERSION,
     url="https://gitlab.com/arstecnica/ytefas.git",
 
@@ -40,10 +40,10 @@ setup(
         ],
     keywords="",
 
-    packages=['arstecnica.ytefas.' + package
-              for package in find_packages('src/arstecnica/ytefas')],
+    packages=['arstecnica.utils.' + package
+              for package in find_packages('src/arstecnica/utils')],
     package_dir={'': 'src'},
-    namespace_packages=['arstecnica', 'arstecnica.ytefas'],
+    namespace_packages=['arstecnica', 'arstecnica.utils'],
 
     install_requires=[
         'asyncpg',

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.ytefas.asyncpg -- pytest configuration
+# :Project:   arstecnica.utils.asyncpg -- pytest configuration
 # :Created:   mer 21 dic 2016 12:37:39 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
@@ -12,7 +12,7 @@ from sys import exit
 import asyncpg
 import pytest
 
-from arstecnica.ytefas.asyncpg import fetchall, scalar
+from arstecnica.utils.asyncpg import fetchall, scalar
 from arstecnica.ytefas.model.utils import assert_database_is_up
 
 

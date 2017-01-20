@@ -1,5 +1,5 @@
 .. -*- coding: utf-8 -*-
-.. :Project:   arstecnica.ytefas.asyncpg -- Adaptor documentation
+.. :Project:   arstecnica.utils.asyncpg -- Adaptor documentation
 .. :Created:   dom 15 gen 2017 13:08:25 CET
 .. :Author:    Lele Gaifax <lele@metapensiero.it>
 .. :License:   No License
@@ -10,5 +10,5 @@
  Functions
 ===========
 
-.. automodule:: arstecnica.ytefas.asyncpg.funcs
+.. automodule:: arstecnica.utils.asyncpg.funcs
    :members:

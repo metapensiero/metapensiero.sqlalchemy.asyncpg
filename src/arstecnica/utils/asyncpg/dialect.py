@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.ytefas.asyncpg -- Special dialect
+# :Project:   arstecnica.utils.asyncpg -- Special dialect
 # :Created:   mar 20 dic 2016 21:23:47 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
-# :Copyright: © 2016 Arstecnica s.r.l.
+# :Copyright: © 2016, 2017 Arstecnica s.r.l.
 #
 
 from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2

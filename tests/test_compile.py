@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.ytefas.asyncpg -- Tests for the compile() function
+# :Project:   arstecnica.utils.asyncpg -- Tests for the compile() function
 # :Created:   mer 21 dic 2016 12:40:11 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
@@ -9,7 +9,7 @@
 import sqlalchemy as sa
 import pytest
 
-from arstecnica.ytefas.asyncpg import compile
+from arstecnica.utils.asyncpg import compile
 
 
 table = sa.Table('test', sa.MetaData(),

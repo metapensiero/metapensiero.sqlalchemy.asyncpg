@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.ytefas.asyncpg -- See https://github.com/MagicStack/asyncpg/issues/32
+# :Project:   arstecnica.utils.asyncpg -- See https://github.com/MagicStack/asyncpg/issues/32
 # :Created:   gio 22 dic 2016 11:27:52 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
@@ -11,7 +11,7 @@ from datetime import date, timedelta
 import sqlalchemy as sa
 import pytest
 
-from arstecnica.ytefas import asyncpg
+from arstecnica.utils import asyncpg
 from arstecnica.ytefas.model.tables.auth import users
 
 

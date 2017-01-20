@@ -1,5 +1,5 @@
 .. -*- coding: utf-8 -*-
-.. :Project:   arstecnica.ytefas.asyncpg -- SQLAlchemy adaptor for asyncpg
+.. :Project:   arstecnica.utils.asyncpg -- SQLAlchemy adaptor for asyncpg
 .. :Created:   Tue 20 Dec 2016 21:17:12 CET
 .. :Author:    Lele Gaifax <lele@arstecnica.it>
 .. :License:   No license
@@ -7,7 +7,7 @@
 ..
 
 ===========================
- arstecnica.ytefas.asyncpg
+ arstecnica.utils.asyncpg
 ===========================
 
 SQLAlchemy adaptor for asyncpg

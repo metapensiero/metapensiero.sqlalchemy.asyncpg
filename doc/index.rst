@@ -1,5 +1,5 @@
 .. -*- coding: utf-8 -*-
-.. :Project:   arstecnica.ytefas.asyncpg -- Documentation
+.. :Project:   arstecnica.utils.asyncpg -- Documentation
 .. :Created:   mer 21 dic 2016 11:49:21 CET
 .. :Author:    Lele Gaifax <lele@metapensiero.it>
 .. :License:   No License

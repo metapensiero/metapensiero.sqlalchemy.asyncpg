@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.ytefas.asyncpg -- Variant of metapensiero.sqlalchemy.proxy
+# :Project:   arstecnica.utils.asyncpg -- Variant of metapensiero.sqlalchemy.proxy
 # :Created:   mer 11 gen 2017 10:16:27 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
