@@ -6,7 +6,6 @@
 # :Copyright: © 2016, 2017 Arstecnica s.r.l.
 #
 
-from io import open
 import os
 
 from setuptools import setup, find_packages
