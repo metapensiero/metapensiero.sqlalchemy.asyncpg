@@ -13,7 +13,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.sql.expression import Selectable
 
 from metapensiero.sqlalchemy.proxy.core import ProxiedQuery
-from metapensiero.sqlalchemy.proxy.utils import apply_sorters
+from metapensiero.sqlalchemy.proxy.sorters import apply_sorters
 
 
 logger = getLogger(__name__)
@@ -74,7 +74,6 @@ class AsyncpgProxiedQuery(ProxiedQuery):
 
         (query, result, asdict,
          resultslot, successslot, messageslot, countslot, metadataslot,
-         sort, dir,
          start, limit) = self.prepareQueryFromConditionsAndArgs(dbconn,
                                                                 conditions,
                                                                 args)
@@ -86,8 +85,7 @@ class AsyncpgProxiedQuery(ProxiedQuery):
                     result[countslot] = count
 
                 if resultslot:
-                    if sort:
-                        query = apply_sorters(query, sort, dir)
+                    query = apply_sorters(query, args)
                     if start:
                         query = query.offset(start)
                     if limit:

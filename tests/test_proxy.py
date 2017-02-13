@@ -62,7 +62,7 @@ async def test_sort(connection):
     proxy = AsyncpgProxiedQuery(users.select())
 
     result = await proxy(connection,
-                         sort='[{"property":"name","direction":"DESC"}]')
+                         sorters='[{"property":"name","direction":"DESC"}]')
 
     assert len(result) == 4
     assert result[0]['name'] == 'titolare_ca'
@@ -73,7 +73,7 @@ async def test_sort(connection):
     assert result[0]['name'] == 'admin'
 
     result = await proxy(connection,
-                         sort=[dict(property="name", direction="ASC")])
+                         sorters=[dict(property="name", direction="ASC")])
 
     assert len(result) == 4
     assert result[0]['name'] == 'admin'
