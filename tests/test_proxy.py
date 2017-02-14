@@ -41,7 +41,7 @@ async def test_plain(connection):
 async def test_limit(connection):
     proxy = AsyncpgProxiedQuery(users.select())
 
-    result = await proxy(connection, limit=1, asdict=True)
+    result = await proxy(connection, limit=1)
 
     assert len(result) == 1
     assert 'id' in result[0]
