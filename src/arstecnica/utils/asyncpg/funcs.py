@@ -6,7 +6,13 @@
 # :Copyright: © 2016, 2017 Arstecnica s.r.l.
 #
 
+import logging
+from textwrap import indent
+
 from .dialect import PGDialect_asyncpg
+
+
+logger = logging.getLogger(__name__)
 
 
 def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
@@ -59,6 +65,7 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
+    logger.debug('Executing SQL statement:\n%s', indent(sql, '    '))
     return await apgconn.execute(sql, *args, **kwargs)
 
 
@@ -76,6 +83,7 @@ async def prepare(apgconn, stmt, **kwargs):
     """
 
     sql, args = compile(stmt)
+    logger.debug('Preparing SQL statement:\n%s', indent(sql, '    '))
     return await apgconn.prepare(sql, **kwargs)
 
 
@@ -99,6 +107,8 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
+    logger.debug('Fetching all rows from SQL statement:\n%s',
+                 indent(sql, '    '))
     return await apgconn.fetch(sql, *args, **kwargs)
 
 
@@ -123,6 +133,8 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
+    logger.debug('Fetching single row from SQL statement:\n%s',
+                 indent(sql, '    '))
     return await apgconn.fetchrow(sql, *args, **kwargs)
 
 
@@ -148,4 +160,6 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
+    logger.debug('Fetching scalar result from SQL statement:\n%s',
+                 indent(sql, '    '))
     return await apgconn.fetchval(sql, *args, **kwargs)
