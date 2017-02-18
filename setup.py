@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.utils.asyncpg -- SQLAlchemy adaptor for asyncpg
+# :Project:   metapensiero.sqlalchemy.asyncpg -- SQLAlchemy adaptor for asyncpg
 # :Created:   Tue 20 Dec 2016 21:17:12 CET
 # :Author:    Lele Gaifax <lele@arstecnica.it>
 # :License:   No license
@@ -19,9 +19,9 @@ with open(os.path.join(here, 'version.txt'), encoding='utf-8') as f:
     VERSION = f.read().strip()
 
 setup(
-    name="arstecnica.utils.asyncpg",
+    name="metapensiero.sqlalchemy.asyncpg",
     version=VERSION,
-    url="https://gitlab.com/arstecnica/ytefas.git",
+    url="https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg.git",
 
     description="SQLAlchemy adaptor for asyncpg",
     long_description=README + '\n\n' + CHANGES,
@@ -39,10 +39,10 @@ setup(
         ],
     keywords="",
 
-    packages=['arstecnica.utils.' + package
-              for package in find_packages('src/arstecnica/utils')],
+    packages=['metapensiero.sqlalchemy.' + package
+              for package in find_packages('src/metapensiero/sqlalchemy')],
     package_dir={'': 'src'},
-    namespace_packages=['arstecnica', 'arstecnica.utils'],
+    namespace_packages=['metapensiero', 'metapensiero.sqlalchemy'],
 
     install_requires=[
         'asyncpg',

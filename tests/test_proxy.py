@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.utils.asyncpg -- Test the asyncpg proxy
+# :Project:   metapensiero.sqlalchemy.asyncpg -- Test the asyncpg proxy
 # :Created:   gio 29 dic 2016 10:32:24 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
@@ -8,7 +8,7 @@
 
 import pytest
 
-from arstecnica.utils.asyncpg.proxy import AsyncpgProxiedQuery
+from metapensiero.sqlalchemy.asyncpg.proxy import AsyncpgProxiedQuery
 from arstecnica.ytefas.model.tables.auth import users
 
 

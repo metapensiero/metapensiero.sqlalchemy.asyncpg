@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.utils.asyncpg -- Special dialect
+# :Project:   metapensiero.sqlalchemy.asyncpg -- Special dialect
 # :Created:   mar 20 dic 2016 21:23:47 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License

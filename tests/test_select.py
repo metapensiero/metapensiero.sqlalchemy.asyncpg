@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.utils.asyncpg -- Test various select functions
+# :Project:   metapensiero.sqlalchemy.asyncpg -- Test various select functions
 # :Created:   mer 21 dic 2016 13:23:19 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
 # :License:   No License
@@ -9,7 +9,8 @@
 import sqlalchemy as sa
 import pytest
 
-from arstecnica.utils import asyncpg
+from metapensiero.sqlalchemy import asyncpg
+
 from arstecnica.ytefas.model.tables.auth import users
 
 

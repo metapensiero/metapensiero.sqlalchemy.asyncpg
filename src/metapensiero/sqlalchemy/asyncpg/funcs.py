@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# :Project:   arstecnica.utils.asyncpg -- Adaptor functions
+# :Project:   metapensiero.sqlalchemy.asyncpg -- Adaptor functions
 # :Created:   Tue 20 Dec 2016 21:17:12 CET
 # :Author:    Lele Gaifax <lele@arstecnica.it>
 # :License:   No license

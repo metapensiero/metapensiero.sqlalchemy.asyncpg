@@ -1,5 +1,5 @@
 .. -*- coding: utf-8 -*-
-.. :Project:   arstecnica.utils.asyncpg -- Adaptor documentation
+.. :Project:   metapensiero.sqlalchemy.asyncpg -- Adaptor documentation
 .. :Created:   dom 15 gen 2017 13:08:25 CET
 .. :Author:    Lele Gaifax <lele@metapensiero.it>
 .. :License:   No License
@@ -10,5 +10,5 @@
  Functions
 ===========
 
-.. automodule:: arstecnica.utils.asyncpg.funcs
+.. automodule:: metapensiero.sqlalchemy.asyncpg.funcs
    :members:
