@@ -15,6 +15,20 @@ from .dialect import PGDialect_asyncpg
 logger = logging.getLogger(__name__)
 
 
+def _honor_column_default(params, column, default, key_getter):
+    key = key_getter(column)
+    val = params.get(key)
+    if val is None:
+        if not default.is_sequence and default.is_scalar:
+            val = default.arg
+        else:
+            if default.is_callable:
+                val = default.arg(None)
+
+        if val is not None:
+            params[key] = val
+
+
 def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
     """Compile an SQLAlchemy core statement and extract its parameters.
 
@@ -44,6 +58,22 @@ def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
     else:
         compiled = stmt.compile(dialect=_d)
         params = compiled.construct_params(named_args)
+
+        # Honor column's default or unupdate setting: following code adapted
+        # from SA's DefaultExecutionContext._process_executesingle_defaults()
+        # logic
+
+        key_getter = compiled._key_getters_for_crud_column[2]
+        for c in compiled.insert_prefetch:
+            default = c.default
+            if default is not None:
+                _honor_column_default(params, c, default, key_getter)
+
+        for c in compiled.update_prefetch:
+            default = c.onupdate
+            if default is not None:
+                _honor_column_default(params, c, default, key_getter)
+
         return compiled.string, tuple(params[p] for p in compiled.positiontup)
 
 

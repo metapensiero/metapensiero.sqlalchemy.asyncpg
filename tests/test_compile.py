@@ -6,6 +6,8 @@
 # :Copyright: © 2016, 2017 Arstecnica s.r.l.
 #
 
+from datetime import datetime
+
 import sqlalchemy as sa
 import pytest
 
@@ -14,7 +16,11 @@ from metapensiero.sqlalchemy.asyncpg import compile
 
 table = sa.Table('test', sa.MetaData(),
                  sa.Column('id', sa.types.Integer),
-                 sa.Column('name', sa.types.String))
+                 sa.Column('name', sa.types.String),
+                 sa.Column('gender', sa.types.String,
+                           nullable=False, default='M'),
+                 sa.Column('updated', sa.types.DateTime,
+                           default=None, onupdate=datetime.now))
 
 
 @pytest.mark.asyncio
@@ -50,11 +56,20 @@ async def test_compile_select_bind_params():
 
 @pytest.mark.asyncio
 async def test_compile_insert_simple():
+    query = table.insert().values(id=1, name='rosy', gender='F')
+    sql, args = compile(query)
+    assert sql.replace('\n', '') == \
+        "INSERT INTO test (id, name, gender) VALUES ($1, $2, $3)"
+    assert args == (1, 'rosy', 'F')
+
+
+@pytest.mark.asyncio
+async def test_compile_insert_simple_with_default():
     query = table.insert().values(id=1, name='lele')
     sql, args = compile(query)
     assert sql.replace('\n', '') == \
-        "INSERT INTO test (id, name) VALUES ($1, $2)"
-    assert args == (1, 'lele')
+        "INSERT INTO test (id, name, gender) VALUES ($1, $2, $3)"
+    assert args == (1, 'lele', 'M')
 
 
 @pytest.mark.asyncio
@@ -64,8 +79,8 @@ async def test_compile_insert_bind_params():
         compile(query)
     sql, args = compile(query, named_args={'some_name': 'lele'})
     assert sql.replace('\n', '') == \
-        "INSERT INTO test (id, name) VALUES ($1, $2)"
-    assert args == (1, 'lele')
+        "INSERT INTO test (id, name, gender) VALUES ($1, $2, $3)"
+    assert args == (1, 'lele', 'M')
 
 
 @pytest.mark.asyncio
@@ -90,11 +105,24 @@ async def test_compile_delete_bind_params():
 
 @pytest.mark.asyncio
 async def test_compile_update_simple():
+    query = table.update().where(table.c.id == 1).values(gender='F')
+    sql, args = compile(query)
+    assert sql.replace('\n', '') == \
+        "UPDATE test SET gender=$1, updated=$2 WHERE test.id = $3"
+    assert args[0] == 'F'
+    assert isinstance(args[1], datetime)
+    assert args[2] == 1
+
+
+@pytest.mark.asyncio
+async def test_compile_update_simple_with_default():
     query = table.update().where(table.c.id == 1).values(name='lele')
     sql, args = compile(query)
     assert sql.replace('\n', '') == \
-        "UPDATE test SET name=$1 WHERE test.id = $2"
-    assert args == ('lele', 1)
+        "UPDATE test SET name=$1, updated=$2 WHERE test.id = $3"
+    assert args[0] == 'lele'
+    assert isinstance(args[1], datetime)
+    assert args[2] == 1
 
 
 @pytest.mark.asyncio
@@ -104,5 +132,7 @@ async def test_compile_update_bind_params():
         compile(query)
     sql, args = compile(query, named_args={'some_name': 'lele'})
     assert sql.replace('\n', '') == \
-        "UPDATE test SET name=$1 WHERE test.id = $2"
-    assert args == ('lele', 1)
+        "UPDATE test SET name=$1, updated=$2 WHERE test.id = $3"
+    assert args[0] == 'lele'
+    assert isinstance(args[1], datetime)
+    assert args[2] == 1
