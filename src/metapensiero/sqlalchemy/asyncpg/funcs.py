@@ -7,7 +7,6 @@
 #
 
 import logging
-from textwrap import indent
 
 from .dialect import PGDialect_asyncpg
 
@@ -27,6 +26,35 @@ def _honor_column_default(params, column, default, key_getter):
 
         if val is not None:
             params[key] = val
+
+
+def _format_arg(arg):
+    from uuid import UUID
+
+    if isinstance(arg, UUID):
+        arg = str(arg)
+
+    return repr(arg)
+
+
+def _log_sql_statement(message, sql, args):
+    from re import sub
+    from textwrap import indent
+
+    try:
+        from sqlparse import format
+        sql = format(sql, reindent=True)
+    except ImportError:
+        pass
+
+    if args:
+        sql = sub(r'\$\d+',
+                  lambda m: _format_arg(args[int(m.group(0)[1:])-1]),
+                  sql)
+
+    sql = indent(sql, '    ')
+
+    logger.debug('%s:\n%s', message, sql)
 
 
 def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
@@ -96,7 +124,8 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
-    logger.debug('Executing SQL statement:\n%s', indent(sql, '    '))
+    if logger.isEnabledFor(logging.DEBUG):
+        _log_sql_statement('Executing SQL', sql, args)
     return await apgconn.execute(sql, *args, **kwargs)
 
 
@@ -116,7 +145,8 @@ async def prepare(apgconn, stmt, **kwargs):
     """
 
     sql, args = compile(stmt)
-    logger.debug('Preparing SQL statement:\n%s', indent(sql, '    '))
+    if logger.isEnabledFor(logging.DEBUG):
+        _log_sql_statement('Preparing SQL', sql, args)
     return await apgconn.prepare(sql, **kwargs)
 
 
@@ -143,8 +173,8 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
-    logger.debug('Fetching all rows from SQL statement:\n%s',
-                 indent(sql, '    '))
+    if logger.isEnabledFor(logging.DEBUG):
+        _log_sql_statement('Fetching rows from SQL', sql, args)
     return await apgconn.fetch(sql, *args, **kwargs)
 
 
@@ -171,8 +201,8 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
-    logger.debug('Fetching single row from SQL statement:\n%s',
-                 indent(sql, '    '))
+    if logger.isEnabledFor(logging.DEBUG):
+        _log_sql_statement('Fetching row from SQL', sql, args)
     return await apgconn.fetchrow(sql, *args, **kwargs)
 
 
@@ -200,6 +230,6 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
-    logger.debug('Fetching scalar result from SQL statement:\n%s',
-                 indent(sql, '    '))
+    if logger.isEnabledFor(logging.DEBUG):
+        _log_sql_statement('Fetching scalar from SQL', sql, args)
     return await apgconn.fetchval(sql, *args, **kwargs)
