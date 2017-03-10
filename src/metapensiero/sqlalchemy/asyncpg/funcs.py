@@ -91,7 +91,8 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     the `apgconn` connection with the needed parameters.
 
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.execute
+    __ https://magicstack.github.io/asyncpg/devel/api/\
+       index.html#asyncpg.connection.Connection.execute
     """
 
     sql, args = compile(stmt, pos_args, named_args)
@@ -107,9 +108,11 @@ async def prepare(apgconn, stmt, **kwargs):
     :param \*\*kwargs: any valid `prepare()`__ keyword argument
     :return: a string with the status of the last instruction
 
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#prepared-statements
+    __ https://magicstack.github.io/asyncpg/devel/api/\
+       index.html#prepared-statements
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.prepare
+    __ https://magicstack.github.io/asyncpg/devel/api/\
+       index.html#asyncpg.connection.Connection.prepare
     """
 
     sql, args = compile(stmt)
@@ -118,7 +121,8 @@ async def prepare(apgconn, stmt, **kwargs):
 
 
 async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
-    """Execute the given statement on a asyncpg connection and return resulting records.
+    """Execute the given statement on a asyncpg connection and return
+    resulting records.
 
     :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
@@ -132,8 +136,10 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     is finally returned.
 
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.fetch
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.Record
+    __ https://magicstack.github.io/asyncpg/devel/api/\
+       index.html#asyncpg.connection.Connection.fetch
+    __ https://magicstack.github.io/asyncpg/devel/api/\
+       index.html#asyncpg.Record
     """
 
     sql, args = compile(stmt, pos_args, named_args)
@@ -143,8 +149,8 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
 
 async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
-    """Execute the given statement on a asyncpg connection and return the first
-    row.
+    """Execute the given statement on a asyncpg connection and return the
+    first row.
 
     :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
@@ -158,8 +164,10 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     result is finally returned.
 
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.fetchrow
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.Record
+    __ https://magicstack.github.io/asyncpg/devel/api/\
+       index.html#asyncpg.connection.Connection.fetchrow
+    __ https://magicstack.github.io/asyncpg/devel/api/\
+       index.html#asyncpg.Record
     """
 
     sql, args = compile(stmt, pos_args, named_args)
@@ -185,8 +193,10 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     default ``0`` to mean the first) is finally returned.
 
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.connection.Connection.fetchval
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#asyncpg.Record
+    __ https://magicstack.github.io/asyncpg/devel/api/\
+       index.html#asyncpg.connection.Connection.fetchval
+    __ https://magicstack.github.io/asyncpg/devel/api/\
+       index.html#asyncpg.Record
     """
 
     sql, args = compile(stmt, pos_args, named_args)

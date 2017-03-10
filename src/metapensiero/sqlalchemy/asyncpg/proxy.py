@@ -23,7 +23,8 @@ class AsyncpgProxiedQuery(ProxiedQuery):
     """
     An asyncpg variant of the `ProxiedQuery`__.
 
-    __ http://metapensierosqlalchemyproxy.readthedocs.io/en/latest/core.html#metapensiero.sqlalchemy.proxy.core.ProxiedQuery
+    __ http://metapensierosqlalchemyproxy.readthedocs.io/en/latest/\
+       core.html#metapensiero.sqlalchemy.proxy.core.ProxiedQuery
     """
 
     async def getCount(self, dbconn, query):
