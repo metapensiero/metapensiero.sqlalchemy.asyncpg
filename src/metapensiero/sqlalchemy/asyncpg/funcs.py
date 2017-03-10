@@ -125,7 +125,9 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
-        _log_sql_statement('Executing SQL', sql, args)
+        tx = apgconn._top_xact
+        _log_sql_statement('Executing in transaction %0x' % id(tx),
+                           sql, args)
     return await apgconn.execute(sql, *args, **kwargs)
 
 
@@ -146,7 +148,9 @@ async def prepare(apgconn, stmt, **kwargs):
 
     sql, args = compile(stmt)
     if logger.isEnabledFor(logging.DEBUG):
-        _log_sql_statement('Preparing SQL', sql, args)
+        tx = apgconn._top_xact
+        _log_sql_statement('Preparing in transaction %0x' % id(tx),
+                           sql, args)
     return await apgconn.prepare(sql, **kwargs)
 
 
@@ -174,7 +178,9 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
-        _log_sql_statement('Fetching rows from SQL', sql, args)
+        tx = apgconn._top_xact
+        _log_sql_statement('Fetching rows in transaction %0x' % id(tx),
+                           sql, args)
     return await apgconn.fetch(sql, *args, **kwargs)
 
 
@@ -202,7 +208,9 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
-        _log_sql_statement('Fetching row from SQL', sql, args)
+        tx = apgconn._top_xact
+        _log_sql_statement('Fetching row in transaction %0x' % id(tx),
+                           sql, args)
     return await apgconn.fetchrow(sql, *args, **kwargs)
 
 
@@ -231,5 +239,7 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
-        _log_sql_statement('Fetching scalar from SQL', sql, args)
+        tx = apgconn._top_xact
+        _log_sql_statement('Fetching scalar in transaction %0x' % id(tx),
+                           sql, args)
     return await apgconn.fetchval(sql, *args, **kwargs)
