@@ -50,5 +50,10 @@ setup(
         'setuptools',
         'sqlalchemy',
     ],
-    extras_require={'dev': ['metapensiero.tool.bump_version', 'readme']},
+    extras_require={
+        'dev': [
+            'metapensiero.tool.bump_version',
+            'readme_renderer',
+        ]
+    },
 )
