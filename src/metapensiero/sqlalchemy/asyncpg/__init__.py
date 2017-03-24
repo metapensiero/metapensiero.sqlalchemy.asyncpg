@@ -6,7 +6,16 @@
 # :Copyright: © 2017 Arstecnica s.r.l.
 #
 
-from .funcs import compile, execute, prepare, fetchall, fetchone, scalar
+from .connection import Connection
+from .funcs import compile, execute, fetchall, fetchone, prepare, scalar
 
 
-__all__ = ('compile', 'execute', 'prepare', 'fetchall', 'fetchone', 'scalar')
+__all__ = (
+    'Connection',
+    'compile',
+    'execute',
+    'fetchall',
+    'fetchone',
+    'prepare',
+    'scalar',
+)

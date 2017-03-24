@@ -12,7 +12,7 @@ from sys import exit
 import asyncpg
 import pytest
 
-from metapensiero.sqlalchemy.asyncpg import fetchall, scalar
+from metapensiero.sqlalchemy.asyncpg import Connection
 from arstecnica.ytefas.model.utils import assert_database_is_up
 
 
@@ -35,22 +35,11 @@ def pool(event_loop):
     event_loop.run_until_complete(pool.close())
 
 
-class Connection(object):
-    def __init__(self, pool):
-        self.pool = pool
-
-    async def fetchall(self, *args, **kwargs):
-        async with self.pool.acquire() as dbc:
-            return await fetchall(dbc, *args, **kwargs)
-
-    async def scalar(self, *args, **kwargs):
-        async with self.pool.acquire() as dbc:
-            return await scalar(dbc, *args, **kwargs)
-
-
 @pytest.fixture
-def connection(pool):
-    return Connection(pool)
+def connection(pool, event_loop):
+    c = event_loop.run_until_complete(pool.acquire())
+    yield Connection(c)
+    event_loop.run_until_complete(pool.release(c))
 
 
 if not assert_database_is_up(DB_HOST, int(DB_PORT)):
