@@ -25,7 +25,7 @@ table = sa.Table('test', sa.MetaData(),
 
 @pytest.mark.asyncio
 async def test_compile_raw_sql():
-    query = "SELECT id FROM test WHERE id = $1"
+    query = "SELECT id FROM test WHERE id = $1::INTEGER"
     sql, args = compile(query, pos_args=(1,))
     assert sql == query
     assert args == (1,)
@@ -37,7 +37,7 @@ async def test_compile_select_simple():
               .where(table.c.id == 1)
     sql, args = compile(query)
     assert sql.replace('\n', '') == \
-        "SELECT test.id FROM test WHERE test.id = $1"
+        "SELECT test.id FROM test WHERE test.id = $1::INTEGER"
     assert args == (1,)
 
 
@@ -50,7 +50,7 @@ async def test_compile_select_bind_params():
         compile(query)
     sql, args = compile(query, named_args={'some_name': 'lele'})
     assert sql.replace('\n', '') == \
-        "SELECT test.id FROM test WHERE test.id = $1 AND test.name != $2"
+        "SELECT test.id FROM test WHERE test.id = $1::INTEGER AND test.name != $2::VARCHAR"
     assert args == (1, 'lele')
 
 
@@ -59,7 +59,7 @@ async def test_compile_insert_simple():
     query = table.insert().values(id=1, name='rosy', gender='F')
     sql, args = compile(query)
     assert sql.replace('\n', '') == \
-        "INSERT INTO test (id, name, gender) VALUES ($1, $2, $3)"
+        "INSERT INTO test (id, name, gender) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR)"
     assert args == (1, 'rosy', 'F')
 
 
@@ -68,7 +68,7 @@ async def test_compile_insert_simple_with_default():
     query = table.insert().values(id=1, name='lele')
     sql, args = compile(query)
     assert sql.replace('\n', '') == \
-        "INSERT INTO test (id, name, gender) VALUES ($1, $2, $3)"
+        "INSERT INTO test (id, name, gender) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR)"
     assert args == (1, 'lele', 'M')
 
 
@@ -79,7 +79,7 @@ async def test_compile_insert_bind_params():
         compile(query)
     sql, args = compile(query, named_args={'some_name': 'lele'})
     assert sql.replace('\n', '') == \
-        "INSERT INTO test (id, name, gender) VALUES ($1, $2, $3)"
+        "INSERT INTO test (id, name, gender) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR)"
     assert args == (1, 'lele', 'M')
 
 
@@ -88,7 +88,7 @@ async def test_compile_delete_simple():
     query = table.delete().where(table.c.id == 1)
     sql, args = compile(query)
     assert sql.replace('\n', '') == \
-        "DELETE FROM test WHERE test.id = $1"
+        "DELETE FROM test WHERE test.id = $1::INTEGER"
     assert args == (1,)
 
 
@@ -99,7 +99,7 @@ async def test_compile_delete_bind_params():
         compile(query)
     sql, args = compile(query, named_args={'some_name': 'lele'})
     assert sql.replace('\n', '') == \
-        "DELETE FROM test WHERE test.name = $1"
+        "DELETE FROM test WHERE test.name = $1::VARCHAR"
     assert args == ('lele',)
 
 
@@ -108,7 +108,7 @@ async def test_compile_update_simple():
     query = table.update().where(table.c.id == 1).values(gender='F')
     sql, args = compile(query)
     assert sql.replace('\n', '') == \
-        "UPDATE test SET gender=$1, updated=$2 WHERE test.id = $3"
+        "UPDATE test SET gender=$1::VARCHAR, updated=$2::TIMESTAMP WITHOUT TIME ZONE WHERE test.id = $3::INTEGER"
     assert args[0] == 'F'
     assert isinstance(args[1], datetime)
     assert args[2] == 1
@@ -119,7 +119,7 @@ async def test_compile_update_simple_with_default():
     query = table.update().where(table.c.id == 1).values(name='lele')
     sql, args = compile(query)
     assert sql.replace('\n', '') == \
-        "UPDATE test SET name=$1, updated=$2 WHERE test.id = $3"
+        "UPDATE test SET name=$1::VARCHAR, updated=$2::TIMESTAMP WITHOUT TIME ZONE WHERE test.id = $3::INTEGER"
     assert args[0] == 'lele'
     assert isinstance(args[1], datetime)
     assert args[2] == 1
@@ -132,7 +132,7 @@ async def test_compile_update_bind_params():
         compile(query)
     sql, args = compile(query, named_args={'some_name': 'lele'})
     assert sql.replace('\n', '') == \
-        "UPDATE test SET name=$1, updated=$2 WHERE test.id = $3"
+        "UPDATE test SET name=$1::VARCHAR, updated=$2::TIMESTAMP WITHOUT TIME ZONE WHERE test.id = $3::INTEGER"
     assert args[0] == 'lele'
     assert isinstance(args[1], datetime)
     assert args[2] == 1

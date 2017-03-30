@@ -16,7 +16,6 @@ from metapensiero.sqlalchemy import asyncpg
 from arstecnica.ytefas.model.tables.auth import users
 
 
-@pytest.mark.xfail
 @pytest.mark.asyncio
 async def test_activity_period(pool):
     today = date.today()
