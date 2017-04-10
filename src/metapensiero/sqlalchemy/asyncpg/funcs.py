@@ -37,9 +37,11 @@ def _format_arg(arg):
     return repr(arg)
 
 
-def _log_sql_statement(message, sql, args):
+def _log_sql_statement(connection, operation, sql, args):
     from re import sub
     from textwrap import indent
+
+    from asyncpg.pool import PoolConnectionProxy
 
     try:
         from sqlparse import format
@@ -54,7 +56,12 @@ def _log_sql_statement(message, sql, args):
 
     sql = indent(sql, '    ')
 
-    logger.debug('%s:\n%s', message, sql)
+    if isinstance(connection, PoolConnectionProxy):
+        tx = connection._con._top_xact
+    else:
+        tx = connection._top_xact
+
+    logger.debug('%s in transaction %0x:\n%s', operation, id(tx), sql)
 
 
 def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
@@ -125,9 +132,7 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
-        tx = apgconn._top_xact
-        _log_sql_statement('Executing in transaction %0x' % id(tx),
-                           sql, args)
+        _log_sql_statement(apgconn, 'Executing', sql, args)
     return await apgconn.execute(sql, *args, **kwargs)
 
 
@@ -148,9 +153,7 @@ async def prepare(apgconn, stmt, **kwargs):
 
     sql, args = compile(stmt)
     if logger.isEnabledFor(logging.DEBUG):
-        tx = apgconn._top_xact
-        _log_sql_statement('Preparing in transaction %0x' % id(tx),
-                           sql, args)
+        _log_sql_statement(apgconn, 'Preparing', sql, args)
     return await apgconn.prepare(sql, **kwargs)
 
 
@@ -178,9 +181,7 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
-        tx = apgconn._top_xact
-        _log_sql_statement('Fetching rows in transaction %0x' % id(tx),
-                           sql, args)
+        _log_sql_statement(apgconn, 'Fetching rows', sql, args)
     return await apgconn.fetch(sql, *args, **kwargs)
 
 
@@ -208,9 +209,7 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
-        tx = apgconn._top_xact
-        _log_sql_statement('Fetching row in transaction %0x' % id(tx),
-                           sql, args)
+        _log_sql_statement(apgconn, 'Fetching row', sql, args)
     return await apgconn.fetchrow(sql, *args, **kwargs)
 
 
@@ -239,7 +238,5 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
-        tx = apgconn._top_xact
-        _log_sql_statement('Fetching scalar in transaction %0x' % id(tx),
-                           sql, args)
+        _log_sql_statement(apgconn, 'Fetching scalar', sql, args)
     return await apgconn.fetchval(sql, *args, **kwargs)
