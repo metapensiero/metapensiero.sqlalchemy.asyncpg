@@ -113,7 +113,7 @@ def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
 
 
 async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
-    """Execute the given statement on a asyncpg connection.
+    r"""Execute the given statement on a asyncpg connection.
 
     :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
@@ -137,7 +137,7 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
 
 async def prepare(apgconn, stmt, **kwargs):
-    """Create a `prepared statement`__.
+    r"""Create a `prepared statement`__.
 
     :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
@@ -158,7 +158,7 @@ async def prepare(apgconn, stmt, **kwargs):
 
 
 async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
-    """Execute the given statement on a asyncpg connection and return
+    r"""Execute the given statement on a asyncpg connection and return
     resulting records.
 
     :param apgconn: an asyncpg Connection__ instance
@@ -186,7 +186,7 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
 
 async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
-    """Execute the given statement on a asyncpg connection and return the
+    r"""Execute the given statement on a asyncpg connection and return the
     first row.
 
     :param apgconn: an asyncpg Connection__ instance
@@ -214,7 +214,7 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
 
 async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
-    """Execute the given statement on a asyncpg connection and return a single
+    r"""Execute the given statement on a asyncpg connection and return a single
     column of the first row.
 
     :param apgconn: an asyncpg Connection__ instance
