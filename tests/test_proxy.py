@@ -21,10 +21,10 @@ async def test_metadata(connection):
     assert result['metadata']['primary_key'] == 'id'
 
     byname = {finfo['name']: finfo for finfo in result['metadata']['fields']}
-    assert 'email' in byname
+    assert 'name' in byname
     assert 'person_id' in byname
 
-    assert byname['email']['label'] == 'Email'
+    assert byname['name']['label'] == 'User name'
     assert byname['person_id']['foreign_keys'] == ['risk.persons.id']
 
 

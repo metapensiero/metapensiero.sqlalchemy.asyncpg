@@ -16,18 +16,18 @@ from arstecnica.ytefas.model.tables.auth import users
 
 @pytest.mark.asyncio
 async def test_scalar(pool):
-    q = sa.select([users.c.email]) \
+    q = sa.select([users.c.name]) \
         .where(users.c.name == 'segretaria_ca')
     async with pool.acquire() as conn:
-        assert await asyncpg.scalar(conn, q) == 'segre@ca.it'
+        assert await asyncpg.scalar(conn, q) == 'segretaria_ca'
 
 
 @pytest.mark.asyncio
 async def test_scalar_2nd_column(pool):
-    q = sa.select([users.c.name, users.c.email]) \
+    q = sa.select([users.c.person_id, users.c.name]) \
         .where(users.c.name == 'segretaria_ca')
     async with pool.acquire() as conn:
-        assert await asyncpg.scalar(conn, q, column=1) == 'segre@ca.it'
+        assert await asyncpg.scalar(conn, q, column=1) == 'segretaria_ca'
 
 
 @pytest.mark.asyncio
@@ -43,7 +43,7 @@ async def test_scalar_named_args(pool):
 @pytest.mark.asyncio
 async def test_fetchall(pool):
     q = sa.select([users]) \
-        .where(users.c.email.like('%@ca.it'))
+        .where(users.c.name.like('%_ca'))
     async with pool.acquire() as conn:
         result = await asyncpg.fetchall(conn, q)
         assert isinstance(result, list)
@@ -53,9 +53,8 @@ async def test_fetchall(pool):
 @pytest.mark.asyncio
 async def test_fetchone(pool):
     q = sa.select([users]) \
-        .where(users.c.email.like('%@ca.it'))
+        .where(users.c.name.like('%_ca'))
     async with pool.acquire() as conn:
         result = await asyncpg.fetchone(conn, q)
         assert type(result).__name__ == 'Record'
-        assert result['email'].endswith('@ca.it')
-        assert 'name' in result
+        assert result['name'].endswith('_ca')
