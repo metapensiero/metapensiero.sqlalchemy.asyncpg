@@ -34,7 +34,7 @@ async def test_plain(connection):
 
     result = await proxy(connection)
 
-    assert len(result) == 4
+    assert len(result) == 5
 
 
 @pytest.mark.asyncio
@@ -64,18 +64,18 @@ async def test_sort(connection):
     result = await proxy(connection,
                          sorters='[{"property":"name","direction":"DESC"}]')
 
-    assert len(result) == 4
+    assert len(result) == 5
     assert result[0]['name'] == 'titolare_ca'
 
     result = await proxy(connection, sort='[{"property":"name"}]')
 
-    assert len(result) == 4
+    assert len(result) == 5
     assert result[0]['name'] == 'admin'
 
     result = await proxy(connection,
                          sorters=[dict(property="name", direction="ASC")])
 
-    assert len(result) == 4
+    assert len(result) == 5
     assert result[0]['name'] == 'admin'
 
 

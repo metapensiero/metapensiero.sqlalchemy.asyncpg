@@ -47,7 +47,7 @@ async def test_fetchall(pool):
     async with pool.acquire() as conn:
         result = await asyncpg.fetchall(conn, q)
         assert isinstance(result, list)
-        assert len(result) == 2
+        assert len(result) == 3
 
 
 @pytest.mark.asyncio
