@@ -25,7 +25,7 @@ async def test_metadata(connection):
     assert 'person_id' in byname
 
     assert byname['name']['label'] == 'User name'
-    assert byname['person_id']['foreign_keys'] == ['risk.persons.id']
+    assert byname['person_id']['foreign_keys'] == ('risk.persons.id',)
 
 
 @pytest.mark.asyncio
