@@ -8,10 +8,14 @@
 
 from datetime import datetime
 
-import sqlalchemy as sa
 import pytest
+import sqlalchemy as sa
 
 from metapensiero.sqlalchemy.asyncpg import compile
+
+
+# All test coroutines will be treated as marked
+pytestmark = pytest.mark.asyncio(forbid_global_loop=True)
 
 
 table = sa.Table('test', sa.MetaData(),
@@ -23,7 +27,6 @@ table = sa.Table('test', sa.MetaData(),
                            default=None, onupdate=datetime.now))
 
 
-@pytest.mark.asyncio
 async def test_compile_raw_sql():
     query = "SELECT id FROM test WHERE id = $1::INTEGER"
     sql, args = compile(query, pos_args=(1,))
@@ -31,7 +34,6 @@ async def test_compile_raw_sql():
     assert args == (1,)
 
 
-@pytest.mark.asyncio
 async def test_compile_select_simple():
     query = sa.select([table.c.id]) \
               .where(table.c.id == 1)
@@ -41,7 +43,6 @@ async def test_compile_select_simple():
     assert args == (1,)
 
 
-@pytest.mark.asyncio
 async def test_compile_select_bind_params():
     query = sa.select([table.c.id]) \
               .where(table.c.id == 1) \
@@ -54,7 +55,6 @@ async def test_compile_select_bind_params():
     assert args == (1, 'lele')
 
 
-@pytest.mark.asyncio
 async def test_compile_select_func():
     tc = table.c
     query = sa.select([sa.func.concat_ws('_', tc.name, tc.gender)]) \
@@ -66,7 +66,6 @@ async def test_compile_select_func():
     assert args == ('_', 1)
 
 
-@pytest.mark.asyncio
 async def test_compile_insert_simple():
     query = table.insert().values(id=1, name='rosy', gender='F')
     sql, args = compile(query)
@@ -75,7 +74,6 @@ async def test_compile_insert_simple():
     assert args == (1, 'rosy', 'F')
 
 
-@pytest.mark.asyncio
 async def test_compile_insert_simple_with_default():
     query = table.insert().values(id=1, name='lele')
     sql, args = compile(query)
@@ -84,7 +82,6 @@ async def test_compile_insert_simple_with_default():
     assert args == (1, 'lele', 'M')
 
 
-@pytest.mark.asyncio
 async def test_compile_insert_bind_params():
     query = table.insert().values(id=1, name=sa.sql.bindparam('some_name'))
     with pytest.raises(sa.exc.InvalidRequestError):
@@ -95,7 +92,6 @@ async def test_compile_insert_bind_params():
     assert args == (1, 'lele', 'M')
 
 
-@pytest.mark.asyncio
 async def test_compile_delete_simple():
     query = table.delete().where(table.c.id == 1)
     sql, args = compile(query)
@@ -104,7 +100,6 @@ async def test_compile_delete_simple():
     assert args == (1,)
 
 
-@pytest.mark.asyncio
 async def test_compile_delete_bind_params():
     query = table.delete().where(table.c.name == sa.sql.bindparam('some_name'))
     with pytest.raises(sa.exc.InvalidRequestError):
@@ -115,7 +110,6 @@ async def test_compile_delete_bind_params():
     assert args == ('lele',)
 
 
-@pytest.mark.asyncio
 async def test_compile_update_simple():
     query = table.update().where(table.c.id == 1).values(gender='F')
     sql, args = compile(query)
@@ -126,7 +120,6 @@ async def test_compile_update_simple():
     assert args[2] == 1
 
 
-@pytest.mark.asyncio
 async def test_compile_update_simple_with_default():
     query = table.update().where(table.c.id == 1).values(name='lele')
     sql, args = compile(query)
@@ -137,7 +130,6 @@ async def test_compile_update_simple_with_default():
     assert args[2] == 1
 
 
-@pytest.mark.asyncio
 async def test_compile_update_bind_params():
     query = table.update().where(table.c.id == 1).values(name=sa.sql.bindparam('some_name'))
     with pytest.raises(sa.exc.InvalidRequestError):

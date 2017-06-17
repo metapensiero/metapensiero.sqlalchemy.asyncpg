@@ -8,15 +8,18 @@
 
 from datetime import date, timedelta
 
-import sqlalchemy as sa
 import pytest
+import sqlalchemy as sa
 
 from metapensiero.sqlalchemy import asyncpg
 
 from arstecnica.ytefas.model.tables.auth import users
 
 
-@pytest.mark.asyncio
+# All test coroutines will be treated as marked
+pytestmark = pytest.mark.asyncio(forbid_global_loop=True)
+
+
 async def test_activity_period(pool):
     today = date.today()
     q = sa.select([users.c.id]) \
@@ -35,7 +38,6 @@ async def test_activity_period(pool):
         assert result is None
 
 
-@pytest.mark.asyncio
 async def test_activity_period_with_explicit_range(pool):
     from asyncpg.types import Range
 
@@ -57,7 +59,6 @@ async def test_activity_period_with_explicit_range(pool):
         assert result is None
 
 
-@pytest.mark.asyncio
 async def test_activity_period_works(pool):
     today = date.today()
     q = sa.select([users.c.id]) \

@@ -6,15 +6,18 @@
 # :Copyright: © 2017 Arstecnica s.r.l.
 #
 
-import sqlalchemy as sa
 import pytest
+import sqlalchemy as sa
 
 from metapensiero.sqlalchemy import asyncpg
 
 from arstecnica.ytefas.model.tables.risk import schedules
 
 
-@pytest.mark.asyncio
+# All test coroutines will be treated as marked
+pytestmark = pytest.mark.asyncio(forbid_global_loop=True)
+
+
 async def test_schedule_repeat_after(pool):
     q = sa.select([schedules.c.repeat_after]) \
         .where(schedules.c.name == 'Revisione pulegge')

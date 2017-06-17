@@ -12,7 +12,10 @@ from metapensiero.sqlalchemy.asyncpg.proxy import AsyncpgProxiedQuery
 from arstecnica.ytefas.model.tables.auth import users
 
 
-@pytest.mark.asyncio
+# All test coroutines will be treated as marked
+pytestmark = pytest.mark.asyncio(forbid_global_loop=True)
+
+
 async def test_metadata(connection):
     proxy = AsyncpgProxiedQuery(users.select())
 
@@ -28,7 +31,6 @@ async def test_metadata(connection):
     assert byname['person_id']['foreign_keys'] == ('risk.persons.id',)
 
 
-@pytest.mark.asyncio
 async def test_plain(connection):
     proxy = AsyncpgProxiedQuery(users.select())
 
@@ -37,7 +39,6 @@ async def test_plain(connection):
     assert len(result) == 5
 
 
-@pytest.mark.asyncio
 async def test_limit(connection):
     proxy = AsyncpgProxiedQuery(users.select())
 
@@ -47,7 +48,6 @@ async def test_limit(connection):
     assert 'id' in result[0]
 
 
-@pytest.mark.asyncio
 async def test_count(connection):
     proxy = AsyncpgProxiedQuery(users.select())
 
@@ -57,7 +57,6 @@ async def test_count(connection):
     assert len(result['rows']) == result['count']
 
 
-@pytest.mark.asyncio
 async def test_sort(connection):
     proxy = AsyncpgProxiedQuery(users.select())
 
@@ -79,7 +78,6 @@ async def test_sort(connection):
     assert result[0]['name'] == 'admin'
 
 
-@pytest.mark.asyncio
 async def test_filters(connection):
     proxy = AsyncpgProxiedQuery(users.select())
 
