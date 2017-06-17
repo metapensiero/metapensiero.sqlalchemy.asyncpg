@@ -55,6 +55,18 @@ async def test_compile_select_bind_params():
 
 
 @pytest.mark.asyncio
+async def test_compile_select_func():
+    tc = table.c
+    query = sa.select([sa.func.concat_ws('_', tc.name, tc.gender)]) \
+              .where(table.c.id == 1)
+    sql, args = compile(query)
+    assert sql.replace('\n', '') == \
+        "SELECT concat_ws($1::VARCHAR, test.name, test.gender) AS concat_ws_1"\
+        " FROM test WHERE test.id = $2::INTEGER"
+    assert args == ('_', 1)
+
+
+@pytest.mark.asyncio
 async def test_compile_insert_simple():
     query = table.insert().values(id=1, name='rosy', gender='F')
     sql, args = compile(query)
