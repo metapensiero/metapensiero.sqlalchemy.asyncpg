@@ -34,7 +34,12 @@ def _format_arg(arg):
     if isinstance(arg, UUID):
         arg = str(arg)
 
-    return repr(arg)
+    rarg = repr(arg)
+
+    if len(rarg) > 50:
+        rarg = rarg[:20] + ' … ' + rarg[-20:]
+
+    return rarg
 
 
 def _log_sql_statement(connection, operation, sql, args):
