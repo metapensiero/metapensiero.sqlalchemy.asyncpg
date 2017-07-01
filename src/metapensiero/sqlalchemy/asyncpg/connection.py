@@ -29,3 +29,6 @@ class Connection:
 
     async def scalar(self, stmt, pos_args=None, named_args=None):
         return await scalar(self.apgc, stmt, pos_args, named_args)
+
+    def transaction(self):
+        return self.apgc.transaction()
