@@ -30,9 +30,21 @@ def _honor_column_default(params, column, default, key_getter):
 
 def _format_arg(arg):
     from uuid import UUID
+    from asyncpg.types import Range
 
     if isinstance(arg, UUID):
         arg = str(arg)
+    elif isinstance(arg, Range):
+        if arg.isempty:
+            arg = 'empty range'
+        else:
+            lb = '[' if arg.lower_inc else '('
+            ub = ']' if arg.upper_inc else ')'
+            v = arg.lower
+            lv = '' if v is None else v.isoformat()
+            v = arg.upper
+            uv = '' if v is None else v.isoformat()
+            arg = '%s%s,%s%s' % (lb, lv, uv, ub)
 
     rarg = repr(arg)
 
