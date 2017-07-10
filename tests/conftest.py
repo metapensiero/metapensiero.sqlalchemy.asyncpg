@@ -12,7 +12,7 @@ from sys import exit
 import asyncpg
 import pytest
 
-from metapensiero.sqlalchemy.asyncpg import Connection
+from metapensiero.sqlalchemy.asyncpg import Connection, register_custom_codecs
 from arstecnica.ytefas.model.utils import assert_database_is_up
 
 
@@ -29,7 +29,8 @@ def pool(event_loop):
     pool = event_loop.run_until_complete(asyncpg.create_pool(
         db_url,
         min_size=1,
-        max_size=10
+        max_size=10,
+        init=register_custom_codecs,
     ))
     yield pool
     event_loop.run_until_complete(pool.close())

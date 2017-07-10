@@ -8,14 +8,19 @@
 
 from .connection import Connection
 from .funcs import compile, execute, fetchall, fetchone, prepare, scalar
+from .types import Interval, json_decode, json_encode, register_custom_codecs
 
 
 __all__ = (
     'Connection',
+    'Interval',
     'compile',
     'execute',
     'fetchall',
     'fetchone',
+    'json_decode',
+    'json_encode',
     'prepare',
+    'register_custom_codecs',
     'scalar',
 )
