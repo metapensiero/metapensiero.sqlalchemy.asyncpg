@@ -7,6 +7,7 @@
 #
 
 import logging
+from time import perf_counter
 
 from .dialect import PGDialect_asyncpg
 
@@ -52,6 +53,17 @@ def _format_arg(arg):
         rarg = rarg[:20] + ' … ' + rarg[-20:]
 
     return rarg
+
+
+def _format_elapsed_time(et):
+    precision = 3
+    units = {"nsec": 1e-9, "usec": 1e-6, "msec": 1e-3, "sec": 1.0}
+    scales = [(scale, unit) for unit, scale in units.items()]
+    scales.sort(reverse=True)
+    for scale, unit in scales:
+        if et >= scale:
+            break
+    return "%.*g %s" % (precision, et / scale, unit)
 
 
 def _log_sql_statement(connection, operation, sql, args):
@@ -150,7 +162,12 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
         _log_sql_statement(apgconn, 'Executing', sql, args)
-    return await apgconn.execute(sql, *args, **kwargs)
+        t0 = perf_counter()
+    result = await apgconn.execute(sql, *args, **kwargs)
+    if logger.isEnabledFor(logging.DEBUG):
+        t1 = perf_counter()
+        logger.debug('Execution took %s', _format_elapsed_time(t1 - t0))
+    return result
 
 
 async def prepare(apgconn, stmt, **kwargs):
@@ -171,7 +188,12 @@ async def prepare(apgconn, stmt, **kwargs):
     sql, args = compile(stmt)
     if logger.isEnabledFor(logging.DEBUG):
         _log_sql_statement(apgconn, 'Preparing', sql, args)
-    return await apgconn.prepare(sql, **kwargs)
+        t0 = perf_counter()
+    result = await apgconn.prepare(sql, **kwargs)
+    if logger.isEnabledFor(logging.DEBUG):
+        t1 = perf_counter()
+        logger.debug('Preparation took %s', _format_elapsed_time(t1 - t0))
+    return result
 
 
 async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
@@ -199,7 +221,13 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
         _log_sql_statement(apgconn, 'Fetching rows', sql, args)
-    return await apgconn.fetch(sql, *args, **kwargs)
+        t0 = perf_counter()
+    result = await apgconn.fetch(sql, *args, **kwargs)
+    if logger.isEnabledFor(logging.DEBUG):
+        t1 = perf_counter()
+        logger.debug('Fetched %d records in %s', len(result),
+                     _format_elapsed_time(t1 - t0))
+    return result
 
 
 async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
@@ -227,7 +255,14 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
         _log_sql_statement(apgconn, 'Fetching row', sql, args)
-    return await apgconn.fetchrow(sql, *args, **kwargs)
+        t0 = perf_counter()
+    result = await apgconn.fetchrow(sql, *args, **kwargs)
+    if logger.isEnabledFor(logging.DEBUG):
+        t1 = perf_counter()
+        logger.debug('Fetched %s in %s',
+                     'no records' if result is None else 'one record',
+                     _format_elapsed_time(t1 - t0))
+    return result
 
 
 async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
@@ -254,4 +289,9 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     sql, args = compile(stmt, pos_args, named_args)
     if logger.isEnabledFor(logging.DEBUG):
         _log_sql_statement(apgconn, 'Fetching scalar', sql, args)
-    return await apgconn.fetchval(sql, *args, **kwargs)
+        t0 = perf_counter()
+    result = await apgconn.fetchval(sql, *args, **kwargs)
+    if logger.isEnabledFor(logging.DEBUG):
+        t1 = perf_counter()
+        logger.debug('Fetched value in %s', _format_elapsed_time(t1 - t0))
+    return result
