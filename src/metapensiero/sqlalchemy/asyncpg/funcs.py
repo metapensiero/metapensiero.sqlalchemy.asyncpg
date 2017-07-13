@@ -231,15 +231,15 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
 
 async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
-    r"""Execute the given statement on a asyncpg connection and return a single
-    column of the first row.
+    r"""Execute the given statement on a asyncpg connection and return a
+    single column of the first row.
 
     :param apgconn: an asyncpg Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
     :param pos_args: a possibly empty sequence of positional arguments
     :param named_args: a possibly empty mapping of named arguments
     :param \*\*kwargs: any valid `fetchval()`__ keyword argument
-    :return: a list of `Record`__ instances
+    :return: the value of the specified column of the first record
 
     The `stmt` is first compiled with :func:`.compile` and then executed on
     the `apgconn` connection with the needed parameters. A particular column
@@ -249,8 +249,6 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
     __ https://magicstack.github.io/asyncpg/devel/api/\
        index.html#asyncpg.connection.Connection.fetchval
-    __ https://magicstack.github.io/asyncpg/devel/api/\
-       index.html#asyncpg.Record
     """
 
     sql, args = compile(stmt, pos_args, named_args)
