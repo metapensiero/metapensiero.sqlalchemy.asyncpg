@@ -144,7 +144,7 @@ def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
 async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     r"""Execute the given statement on a asyncpg connection.
 
-    :param apgconn: an asyncpg Connection__ instance
+    :param apgconn: an ASyncPG Connection__ instance
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
     :param pos_args: a possibly empty sequence of positional arguments
     :param named_args: a possibly empty mapping of named arguments
