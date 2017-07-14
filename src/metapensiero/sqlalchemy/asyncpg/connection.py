@@ -9,6 +9,10 @@
 from .funcs import execute, fetchall, fetchone, prepare, scalar
 
 
+class UnexpectedResultError(RuntimeError):
+    "Exception raised when the execution result does not match."
+
+
 class Connection:
     """Class wrapper to low level functions.
 
@@ -22,8 +26,21 @@ class Connection:
     def __init__(self, apgconnection):
         self.apgc = apgconnection
 
-    async def execute(self, stmt, pos_args=None, named_args=None):
-        return await execute(self.apgc, stmt, pos_args, named_args)
+    async def execute(self, stmt, pos_args=None, named_args=None,
+                      expected_result=None):
+        """Invoke :func:`~.funcs.execute()` forwarding the arguments, with
+        the exception of `expected_result`, returning its result.
+
+        If `expected_result` is not ``None``, then it must match the value
+        returned by the underlying function, otherwise an
+        :Class:`UnexpectedResultError` is raised.
+        """
+
+        result = await execute(self.apgc, stmt, pos_args, named_args)
+        if expected_result is not None and expected_result != result:
+            raise UnexpectedResultError(f'Expected "{expected_result}"'
+                                        f' got "{result}"')
+        return result
 
     async def fetchall(self, stmt, pos_args=None, named_args=None):
         """Invoke :func:`~.funcs.fetchall()` forwarding the arguments,
