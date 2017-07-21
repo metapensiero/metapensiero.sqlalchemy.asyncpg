@@ -64,19 +64,19 @@ json_decode = JSONDecoder(parse_float=Decimal,
 "Custom JSON decoder that knows about PG `daterange`."
 
 
-def _json_encoder(value):
+def _json_encode(value):
     return json_encode(value).encode('utf-8')
 
 
-def _jsonb_encoder(value):
+def _jsonb_encode(value):
     return b'\x01' + json_encode(value).encode('utf-8')
 
 
-def _json_decoder(value):
+def _json_decode(value):
     return json_decode(value.decode('utf-8'))
 
 
-def _jsonb_decoder(value):
+def _jsonb_decode(value):
     return json_decode(value[1:].decode('utf-8'))
 
 
@@ -89,8 +89,8 @@ async def register_custom_codecs(con):
 
     await con.set_builtin_type_codec('hstore', codec_name='pg_contrib.hstore')
     await con.set_type_codec('json', schema='pg_catalog', format='binary',
-                             encoder=_json_encoder, decoder=_json_decoder)
+                             encoder=_json_encode, decoder=_json_decode)
     await con.set_type_codec('jsonb', schema='pg_catalog', format='binary',
-                             encoder=_jsonb_encoder, decoder=_jsonb_decoder)
+                             encoder=_jsonb_encode, decoder=_jsonb_decode)
     await con.set_type_codec('interval', schema='pg_catalog', format='tuple',
                              encoder=lambda x: x, decoder=Interval._decode)
