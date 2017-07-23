@@ -19,9 +19,26 @@ pytestmark = pytest.mark.asyncio(forbid_global_loop=True)
 
 
 async def test_schedule_repeat_after(pool):
-    q = sa.select([schedules.c.repeat_after]) \
-        .where(schedules.c.name == 'Revisione pulegge')
+    q = (sa.select([schedules.c.id, schedules.c.repeat_after])
+         .where(schedules.c.name == 'Revisione pulegge'))
 
     async with pool.acquire() as conn:
-        result = await asyncpg.fetchone(conn, q)
-        assert result['repeat_after'].months == 12*5
+        tx = conn.transaction()
+        await tx.start()
+        try:
+            id, repeat_after = await asyncpg.fetchone(conn, q)
+            assert repeat_after.months == 12*5
+
+            u = (schedules.update()
+                 .where(schedules.c.id == id)
+                 .values(repeat_after=asyncpg.Interval(1, 2, 3)))
+            assert await asyncpg.execute(conn, u) == 'UPDATE 1'
+
+            q = (sa.select([schedules.c.repeat_after])
+                 .where(schedules.c.id == id))
+            result = await asyncpg.scalar(conn, q)
+
+            assert result == asyncpg.Interval(1, 2, 3)
+            assert result == (1, 2, 3)
+        finally:
+            await tx.rollback()

@@ -6,30 +6,49 @@
 # :Copyright: © 2017 Arstecnica s.r.l.
 #
 
+from collections.abc import Hashable
 from decimal import Decimal
-from operator import itemgetter
 
 from asyncpg.types import Range
 from nssjson import JSONDecoder, JSONEncoder
 
 
-class Interval(tuple):
+class Interval(Hashable):
     'Represent a PG `interval`, carrying `months`, `days` and `microseconds`.'
 
-    __slots__ = ()
+    __slots__ = ('months', 'days', 'microseconds')
 
-    def __new__(cls, months, days, microseconds):
+    def __init__(self, months, days, microseconds):
         'Create new instance of Interval(months, days, microseconds)'
-        return tuple.__new__(cls, (months, days, microseconds))
+        self.months = months
+        self.days = days
+        self.microseconds = microseconds
+
+    def __eq__(self, other):
+        if isinstance(other, Interval):
+            return (self.months == other.months
+                    and self.days == other.days
+                    and self.microseconds == other.microseconds)
+        elif isinstance(other, tuple) and len(other) == 3:
+            return (self.months == other[0]
+                    and self.days == other[1]
+                    and self.microseconds == other[2])
+        else:
+            return False
+
+    def __hash__(self):
+        return hash(self.months, self.days, self.microseconds)
+
+    def __repr__(self):
+        return f'Interval({self.months}, {self.days}, {self.microseconds})'
 
     @classmethod
     def _decode(cls, low_level_tuple):
         assert len(low_level_tuple) == 3
-        return tuple.__new__(cls, low_level_tuple)
+        return cls(*low_level_tuple)
 
-    months = property(itemgetter(0), doc='Number of months')
-    days = property(itemgetter(1), doc='Number of days')
-    microseconds = property(itemgetter(2), doc='Number of microseconds')
+    def _encode(self):
+        return (self.months, self.days, self.microseconds)
 
 
 def _daterange_serializer(obj):
@@ -93,4 +112,5 @@ async def register_custom_codecs(con):
     await con.set_type_codec('jsonb', schema='pg_catalog', format='binary',
                              encoder=_jsonb_encode, decoder=_jsonb_decode)
     await con.set_type_codec('interval', schema='pg_catalog', format='tuple',
-                             encoder=lambda x: x, decoder=Interval._decode)
+                             encoder=lambda i: i._encode(),
+                             decoder=Interval._decode)
