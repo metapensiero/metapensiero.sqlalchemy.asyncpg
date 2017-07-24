@@ -25,4 +25,5 @@ __ http://metapensierosqlalchemyproxy.readthedocs.io/en/latest/core.html#metapen
    dialect
    funcs
    connection
+   types
    proxy
