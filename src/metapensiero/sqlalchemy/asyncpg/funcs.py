@@ -66,7 +66,7 @@ def _format_elapsed_time(et):
     return "%.*g %s" % (precision, et / scale, unit)
 
 
-def _log_sql_statement(connection, operation, sql, args):
+def _log_sql_statement(connection, operation, sql, args, logf=logger.debug):
     from re import sub
     from textwrap import indent
 
@@ -90,7 +90,7 @@ def _log_sql_statement(connection, operation, sql, args):
     else:
         tx = connection._top_xact
 
-    logger.debug('%s in transaction %0x:\n%s', operation, id(tx), sql)
+    logf('%s in transaction %0x:\n%s', operation, id(tx), sql)
 
 
 def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
@@ -160,11 +160,18 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
-    if logger.isEnabledFor(logging.DEBUG):
+    debug = logger.isEnabledFor(logging.DEBUG)
+    if debug:
         _log_sql_statement(apgconn, 'Executing', sql, args)
         t0 = perf_counter()
-    result = await apgconn.execute(sql, *args, **kwargs)
-    if logger.isEnabledFor(logging.DEBUG):
+    try:
+        result = await apgconn.execute(sql, *args, **kwargs)
+    except Exception as e:
+        if not debug:
+            _log_sql_statement(apgconn, 'Error "%s" executing' % e,
+                               sql, args, logf=logger.error)
+        raise
+    if debug:
         t1 = perf_counter()
         logger.debug('Execution took %s', _format_elapsed_time(t1 - t0))
     return result
@@ -186,11 +193,18 @@ async def prepare(apgconn, stmt, **kwargs):
     """
 
     sql, args = compile(stmt)
-    if logger.isEnabledFor(logging.DEBUG):
+    debug = logger.isEnabledFor(logging.DEBUG)
+    if debug:
         _log_sql_statement(apgconn, 'Preparing', sql, args)
         t0 = perf_counter()
-    result = await apgconn.prepare(sql, **kwargs)
-    if logger.isEnabledFor(logging.DEBUG):
+    try:
+        result = await apgconn.prepare(sql, **kwargs)
+    except Exception as e:
+        if not debug:
+            _log_sql_statement(apgconn, 'Error "%s" preparing' % e,
+                               sql, args, logf=logger.error)
+        raise
+    if debug:
         t1 = perf_counter()
         logger.debug('Preparation took %s', _format_elapsed_time(t1 - t0))
     return result
@@ -219,11 +233,18 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
-    if logger.isEnabledFor(logging.DEBUG):
+    debug = logger.isEnabledFor(logging.DEBUG)
+    if debug:
         _log_sql_statement(apgconn, 'Fetching rows', sql, args)
         t0 = perf_counter()
-    result = await apgconn.fetch(sql, *args, **kwargs)
-    if logger.isEnabledFor(logging.DEBUG):
+    try:
+        result = await apgconn.fetch(sql, *args, **kwargs)
+    except Exception as e:
+        if not debug:
+            _log_sql_statement(apgconn, 'Error "%s" fetching rows' % e,
+                               sql, args, logf=logger.error)
+        raise
+    if debug:
         t1 = perf_counter()
         logger.debug('Fetched %d records in %s', len(result),
                      _format_elapsed_time(t1 - t0))
@@ -253,11 +274,18 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
-    if logger.isEnabledFor(logging.DEBUG):
+    debug = logger.isEnabledFor(logging.DEBUG)
+    if debug:
         _log_sql_statement(apgconn, 'Fetching row', sql, args)
         t0 = perf_counter()
-    result = await apgconn.fetchrow(sql, *args, **kwargs)
-    if logger.isEnabledFor(logging.DEBUG):
+    try:
+        result = await apgconn.fetchrow(sql, *args, **kwargs)
+    except Exception as e:
+        if not debug:
+            _log_sql_statement(apgconn, 'Error "%s" fetching row' % e,
+                               sql, args, logf=logger.error)
+        raise
+    if debug:
         t1 = perf_counter()
         logger.debug('Fetched %s in %s',
                      'no records' if result is None else 'one record',
@@ -287,11 +315,18 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     """
 
     sql, args = compile(stmt, pos_args, named_args)
-    if logger.isEnabledFor(logging.DEBUG):
+    debug = logger.isEnabledFor(logging.DEBUG)
+    if debug:
         _log_sql_statement(apgconn, 'Fetching scalar', sql, args)
         t0 = perf_counter()
-    result = await apgconn.fetchval(sql, *args, **kwargs)
-    if logger.isEnabledFor(logging.DEBUG):
+    try:
+        result = await apgconn.fetchval(sql, *args, **kwargs)
+    except Exception as e:
+        if not debug:
+            _log_sql_statement(apgconn, 'Error "%s" fetching scalar' % e,
+                               sql, args, logf=logger.error)
+        raise
+    if debug:
         t1 = perf_counter()
         logger.debug('Fetched value in %s', _format_elapsed_time(t1 - t0))
     return result
