@@ -264,7 +264,7 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
 
     The `stmt` is first compiled with :func:`.compile` and then executed on
     the `apgconn` connection with the needed parameters. The first row of it's
-    result is finally returned.
+    result is finally returned, or ``None`` if the result is empty.
 
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
     __ https://magicstack.github.io/asyncpg/devel/api/\
@@ -302,12 +302,25 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     :param pos_args: a possibly empty sequence of positional arguments
     :param named_args: a possibly empty mapping of named arguments
     :param \*\*kwargs: any valid `fetchval()`__ keyword argument
-    :return: the value of the specified column of the first record
+    :return: the value of the specified column of the first record, or
+             ``None`` if the query does not return any rows
 
     The `stmt` is first compiled with :func:`.compile` and then executed on
     the `apgconn` connection with the needed parameters. A particular column
     of the first row (specified positionally with the keyword `column`, by
     default ``0`` to mean the first) is finally returned.
+
+    .. warning:: There is no way to distinguish between a *non existing
+                 record* and a ``None`` value in the requested column of the
+                 first row. If you need to discriminate the case, use
+                 :meth:`fetchone()` instead:
+
+                 .. code-block:: python
+
+                    rec = conn.fetchone(stmt, pos_args)
+                    if rec is not None:
+                        val = rec[column]
+                        ...
 
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
     __ https://magicstack.github.io/asyncpg/devel/api/\
