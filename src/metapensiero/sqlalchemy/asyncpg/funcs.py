@@ -73,10 +73,21 @@ def _log_sql_statement(connection, operation, sql, args, logf=logger.debug):
     from asyncpg.pool import PoolConnectionProxy
 
     try:
-        from sqlparse import format
-        sql = format(sql, reindent=True)
-    except ImportError:
-        pass
+        try:
+            from pg_query import prettify
+        except ImportError:
+            # No pg_query around, fallback to sqlparse...
+            try:
+                from sqlparse import sqlparse_format
+            except ImportError:
+                # No sqlparse either, print the raw query
+                pass
+            else:
+                sql = sqlparse_format(sql, reindent=True)
+        else:
+            sql = prettify(sql)
+    except Exception as e:
+        logger.error('Something wrong with SQL prettification: %s', e)
 
     if args:
         sql = sub(r'\$\d+',
