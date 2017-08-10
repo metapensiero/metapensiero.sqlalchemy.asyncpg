@@ -85,7 +85,7 @@ def _log_sql_statement(connection, operation, sql, args, logf=logger.debug):
             else:
                 sql = sqlparse_format(sql, reindent=True)
         else:
-            sql = prettify(sql)
+            sql = prettify(sql, compact_lists_margin=80)
     except Exception as e:
         logger.error('Something wrong with SQL prettification: %s', e)
 
