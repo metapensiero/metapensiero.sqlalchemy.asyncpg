@@ -67,32 +67,30 @@ def _format_elapsed_time(et):
 
 
 def _log_sql_statement(connection, operation, sql, args, logf=logger.debug):
-    from re import sub
     from textwrap import indent
-
     from asyncpg.pool import PoolConnectionProxy
+    from pg_query import parse_sql, prettify
+    from pg_query.printer import get_printer_for_node_tag, node_printer
+    import pg_query.printers.sql
 
     try:
+        orig_paramref_printer = get_printer_for_node_tag('ParamRef')
         try:
-            from pg_query import prettify
-        except ImportError:
-            # No pg_query around, fallback to sqlparse...
-            try:
-                from sqlparse import sqlparse_format
-            except ImportError:
-                # No sqlparse either, print the raw query
-                pass
-            else:
-                sql = sqlparse_format(sql, reindent=True)
-        else:
-            sql = prettify(sql, compact_lists_margin=80)
+            @node_printer('ParamRef', override=True)
+            def replace_param_ref(node, output):
+                if 0 < node.number.value <= len(args):
+                    output.write(_format_arg(args[node.number.value - 1]))
+                else:
+                    orig_paramref_printer(node, output)
+            newsql = prettify(sql, compact_lists_margin=80, safety_belt=False)
+            # Just to be sure the query remains valid
+            parse_sql(newsql)
+        finally:
+            node_printer('ParamRef', override=True)(orig_paramref_printer)
     except Exception as e:
         logger.error('Something wrong with SQL prettification: %s', e)
-
-    if args:
-        sql = sub(r'\$\d+',
-                  lambda m: _format_arg(args[int(m.group(0)[1:])-1]),
-                  sql)
+    else:
+        sql = newsql
 
     sql = indent(sql, '    ')
 
