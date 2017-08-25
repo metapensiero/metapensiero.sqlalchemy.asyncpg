@@ -73,7 +73,7 @@ class Connection:
     def transaction(self):
         """Start an explicit transaction and return it.
 
-        Typically used in an ``async wait`` statement:
+        Typically used in an ``async with`` statement:
 
         .. code-block:: python
 
