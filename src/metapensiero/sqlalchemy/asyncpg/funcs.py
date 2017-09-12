@@ -83,8 +83,6 @@ def _log_sql_statement(connection, operation, sql, args, logf=logger.debug):
                 else:
                     orig_paramref_printer(node, output)
             newsql = prettify(sql, compact_lists_margin=80, safety_belt=False)
-            # Just to be sure the query remains valid
-            parse_sql(newsql)
         finally:
             node_printer('ParamRef', override=True)(orig_paramref_printer)
     except Exception as e:
