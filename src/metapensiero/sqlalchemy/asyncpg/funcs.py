@@ -12,6 +12,9 @@ from time import perf_counter
 from .dialect import PGDialect_asyncpg
 
 
+SLOW_QUERY_THRESHOLD = 2.0
+"Warn about SQL statements that take more than this amount of seconds."
+
 logger = logging.getLogger(__name__)
 
 
@@ -148,7 +151,8 @@ def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
         return compiled.string, tuple(params[p] for p in compiled.positiontup)
 
 
-async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
+async def execute(apgconn, stmt, pos_args=None, named_args=None,
+                  warn_slow_query_threshold=SLOW_QUERY_THRESHOLD, **kwargs):
     r"""Execute the given statement on a asyncpg connection.
 
     :param apgconn: an ASyncPG Connection__ instance
@@ -170,7 +174,7 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     debug = logger.isEnabledFor(logging.DEBUG)
     if debug:
         _log_sql_statement(apgconn, 'Executing', sql, args)
-        t0 = perf_counter()
+    t0 = perf_counter()
     try:
         result = await apgconn.execute(sql, *args, **kwargs)
     except Exception as e:
@@ -178,9 +182,15 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
             _log_sql_statement(apgconn, 'Error "%s" executing' % e,
                                sql, args, logf=logger.error)
         raise
-    if debug:
-        t1 = perf_counter()
-        logger.debug('Execution took %s', _format_elapsed_time(t1 - t0))
+    elapsed = perf_counter() - t0
+    if debug or elapsed > warn_slow_query_threshold:
+        if debug:
+            logf = (logger.debug if elapsed < warn_slow_query_threshold
+                    else logger.warning)
+            logf('Execution took %s', _format_elapsed_time(elapsed))
+        else:
+            _log_sql_statement(apgconn, 'Suspiciously SLOW query', sql, args,
+                               logf=logger.warning)
     return result
 
 
@@ -217,7 +227,8 @@ async def prepare(apgconn, stmt, **kwargs):
     return result
 
 
-async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
+async def fetchall(apgconn, stmt, pos_args=None, named_args=None,
+                   warn_slow_query_threshold=SLOW_QUERY_THRESHOLD, **kwargs):
     r"""Execute the given statement on a asyncpg connection and return
     resulting records.
 
@@ -243,7 +254,7 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     debug = logger.isEnabledFor(logging.DEBUG)
     if debug:
         _log_sql_statement(apgconn, 'Fetching rows', sql, args)
-        t0 = perf_counter()
+    t0 = perf_counter()
     try:
         result = await apgconn.fetch(sql, *args, **kwargs)
     except Exception as e:
@@ -251,14 +262,21 @@ async def fetchall(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
             _log_sql_statement(apgconn, 'Error "%s" fetching rows' % e,
                                sql, args, logf=logger.error)
         raise
-    if debug:
-        t1 = perf_counter()
-        logger.debug('Fetched %d records in %s', len(result),
-                     _format_elapsed_time(t1 - t0))
+    elapsed = perf_counter() - t0
+    if debug or elapsed > warn_slow_query_threshold:
+        if debug:
+            logf = (logger.debug if elapsed < warn_slow_query_threshold
+                    else logger.warning)
+            logf('Fetched %d records in %s',
+                 len(result), _format_elapsed_time(elapsed))
+        else:
+            _log_sql_statement(apgconn, 'Suspiciously SLOW query', sql, args,
+                               logf=logger.warning)
     return result
 
 
-async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
+async def fetchone(apgconn, stmt, pos_args=None, named_args=None,
+                   warn_slow_query_threshold=SLOW_QUERY_THRESHOLD, **kwargs):
     r"""Execute the given statement on a asyncpg connection and return the
     first row.
 
@@ -284,7 +302,7 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     debug = logger.isEnabledFor(logging.DEBUG)
     if debug:
         _log_sql_statement(apgconn, 'Fetching row', sql, args)
-        t0 = perf_counter()
+    t0 = perf_counter()
     try:
         result = await apgconn.fetchrow(sql, *args, **kwargs)
     except Exception as e:
@@ -292,15 +310,22 @@ async def fetchone(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
             _log_sql_statement(apgconn, 'Error "%s" fetching row' % e,
                                sql, args, logf=logger.error)
         raise
-    if debug:
-        t1 = perf_counter()
-        logger.debug('Fetched %s in %s',
-                     'no records' if result is None else 'one record',
-                     _format_elapsed_time(t1 - t0))
+    elapsed = perf_counter() - t0
+    if debug or elapsed > warn_slow_query_threshold:
+        if debug:
+            logf = (logger.debug if elapsed < warn_slow_query_threshold
+                    else logger.warning)
+            logf('Fetched %s in %s',
+                 'no records' if result is None else 'one record',
+                 _format_elapsed_time(elapsed))
+        else:
+            _log_sql_statement(apgconn, 'Suspiciously SLOW query', sql, args,
+                               logf=logger.warning)
     return result
 
 
-async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
+async def scalar(apgconn, stmt, pos_args=None, named_args=None,
+                 warn_slow_query_threshold=SLOW_QUERY_THRESHOLD, **kwargs):
     r"""Execute the given statement on a asyncpg connection and return a
     single column of the first row.
 
@@ -338,7 +363,7 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
     debug = logger.isEnabledFor(logging.DEBUG)
     if debug:
         _log_sql_statement(apgconn, 'Fetching scalar', sql, args)
-        t0 = perf_counter()
+    t0 = perf_counter()
     try:
         result = await apgconn.fetchval(sql, *args, **kwargs)
     except Exception as e:
@@ -346,7 +371,13 @@ async def scalar(apgconn, stmt, pos_args=None, named_args=None, **kwargs):
             _log_sql_statement(apgconn, 'Error "%s" fetching scalar' % e,
                                sql, args, logf=logger.error)
         raise
-    if debug:
-        t1 = perf_counter()
-        logger.debug('Fetched value in %s', _format_elapsed_time(t1 - t0))
+    elapsed = perf_counter() - t0
+    if debug or elapsed > warn_slow_query_threshold:
+        if debug:
+            logf = (logger.debug if elapsed < warn_slow_query_threshold
+                    else logger.warning)
+            logf('Fetched value in %s', _format_elapsed_time(elapsed))
+        else:
+            _log_sql_statement(apgconn, 'Suspiciously SLOW query', sql, args,
+                               logf=logger.warning)
     return result
