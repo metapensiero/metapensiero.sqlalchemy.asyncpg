@@ -6,7 +6,7 @@
 # :Copyright: © 2017 Arstecnica s.r.l.
 #
 
-from .connection import Connection
+from .connection import Connection, UnexpectedResultError
 from .funcs import compile, execute, fetchall, fetchone, prepare, scalar
 from .types import Interval, json_decode, json_encode, register_custom_codecs
 
