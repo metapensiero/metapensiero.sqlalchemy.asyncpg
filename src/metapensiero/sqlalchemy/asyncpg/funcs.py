@@ -89,7 +89,8 @@ def _log_sql_statement(connection, operation, sql, args, logf=logger.debug):
         finally:
             node_printer('ParamRef', override=True)(orig_paramref_printer)
     except Exception as e:
-        logger.error('Something wrong with SQL prettification: %s', e)
+        logger.error('Something wrong with SQL prettification: %s\n'
+                     '  arguments: %r', e, [_format_arg(a) for a in args])
     else:
         sql = newsql
 
