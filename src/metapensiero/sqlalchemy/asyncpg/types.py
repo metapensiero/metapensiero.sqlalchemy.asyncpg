@@ -73,6 +73,7 @@ def _daterange_serializer(obj):
 json_encode = JSONEncoder(separators=(',', ':'),
                           use_decimal=True,
                           iso_datetime=True,
+                          utc_datetime=True,
                           handle_uuid=True,
                           default=_daterange_serializer).encode
 "Custom JSON encoder that knows about PG `daterange`."
