@@ -60,7 +60,7 @@ def _format_arg(arg):
 
 def _format_elapsed_time(et):
     precision = 3
-    units = {"nsec": 1e-9, "usec": 1e-6, "msec": 1e-3, "sec": 1.0}
+    units = {"nsec": 1e-9, "µsec": 1e-6, "msec": 1e-3, "sec": 1.0}
     scales = [(scale, unit) for unit, scale in units.items()]
     scales.sort(reverse=True)
     for scale, unit in scales:
