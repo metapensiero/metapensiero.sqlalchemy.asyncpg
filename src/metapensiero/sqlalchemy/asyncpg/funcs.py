@@ -72,9 +72,9 @@ def _format_elapsed_time(et):
 def _log_sql_statement(connection, operation, sql, args, logf=logger.debug):
     from textwrap import indent
     from asyncpg.pool import PoolConnectionProxy
-    from pg_query import parse_sql, prettify
+    from pg_query import prettify
     from pg_query.printer import get_printer_for_node_tag, node_printer
-    import pg_query.printers.sql
+    import pg_query.printers.sql  # noqa
 
     try:
         orig_paramref_printer = get_printer_for_node_tag('ParamRef')
