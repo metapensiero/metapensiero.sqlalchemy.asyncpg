@@ -152,7 +152,17 @@ def compile(stmt, pos_args=None, named_args=None, _d=PGDialect_asyncpg()):
         return compiled.string, tuple(params[p] for p in compiled.positiontup)
 
 
+class UnexpectedResultError(RuntimeError):
+    "Exception raised when the execution result does not match."
+
+    def __init__(self, got, expected):
+        super().__init__(f'Expected {expected!r}, got {got!r}')
+        self.expected = expected
+        self.got = got
+
+
 async def execute(apgconn, stmt, pos_args=None, named_args=None,
+                  expected_result=None,
                   warn_slow_query_threshold=SLOW_QUERY_THRESHOLD, **kwargs):
     r"""Execute the given statement on a asyncpg connection.
 
@@ -160,11 +170,16 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None,
     :param stmt: any SQLAlchemy core statement or a raw SQL instruction
     :param pos_args: a possibly empty sequence of positional arguments
     :param named_args: a possibly empty mapping of named arguments
+    :param expected_result: the expected result of the execution, if any
     :param \*\*kwargs: any valid `execute()`__ keyword argument
     :return: a string with the status of the last instruction
 
     The `stmt` is first compiled with :func:`.compile` and then executed on
     the `apgconn` connection with the needed parameters.
+
+    If `expected_result` is not ``None``, then it must match the value
+    returned by the underlying function, otherwise an
+    :class:`UnexpectedResultError` is raised.
 
     __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
     __ https://magicstack.github.io/asyncpg/devel/api/\
@@ -183,6 +198,13 @@ async def execute(apgconn, stmt, pos_args=None, named_args=None,
             _log_sql_statement(apgconn, 'Error "%s" executing' % e,
                                sql, args, logf=logger.error)
         raise
+    else:
+        if expected_result is not None and result != expected_result:
+            if not debug:
+                _log_sql_statement(apgconn, 'Unexpected result executing',
+                                   sql, args, logf=logger.error)
+            raise UnexpectedResultError(result, expected_result)
+
     elapsed = perf_counter() - t0
     if debug or elapsed > warn_slow_query_threshold:
         if debug:
