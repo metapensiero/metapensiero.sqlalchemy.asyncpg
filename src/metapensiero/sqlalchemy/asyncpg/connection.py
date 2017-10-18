@@ -6,7 +6,7 @@
 # :Copyright: © 2017 Arstecnica s.r.l.
 #
 
-from .funcs import execute, fetchall, fetchone, prepare, scalar
+from .funcs import compile, execute, fetchall, fetchone, prepare, scalar
 
 
 class Connection:
@@ -14,13 +14,27 @@ class Connection:
 
     :param apgconnection: an AsyncPG Connection__ instance
 
-    __ https://magicstack.github.io/asyncpg/devel/api/index.html#connection
+    __ https://magicstack.github.io/asyncpg/current/api/index.html#connection
     """
 
     __slots__ = ('apgc',)
 
     def __init__(self, apgconnection):
         self.apgc = apgconnection
+
+    def cursor(self, stmt, pos_args=None, named_args=None, **kwargs):
+        """Return a `Cursor`__ instance on given `stmt`.
+
+        :param stmt: any SQLAlchemy core statement or a raw SQL instruction
+        :param pos_args: a possibly empty sequence of positional arguments
+        :param named_args: a possibly empty mapping of named arguments
+
+        __ https://magicstack.github.io/asyncpg/current/api/index.html\
+           #asyncpg.connection.Connection.cursor
+        """
+
+        sql, args = compile(stmt, pos_args, named_args)
+        return self.apgc.cursor(sql, *args, **kwargs)
 
     async def execute(self, stmt, pos_args=None, named_args=None,
                       expected_result=None):
