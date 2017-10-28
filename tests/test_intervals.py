@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 from metapensiero.sqlalchemy import asyncpg
 
-from arstecnica.ytefas.model.tables.risk import schedules
+from arstecnica.ytefas.model.tables.common import schedules
 
 
 # All test coroutines will be treated as marked

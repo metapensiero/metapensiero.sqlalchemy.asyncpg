@@ -14,7 +14,7 @@ import sqlalchemy as sa
 from metapensiero.sqlalchemy import asyncpg
 
 from arstecnica.ytefas.model.tables.auth import users
-from arstecnica.ytefas.model.tables.risk import person_contracts, persons
+from arstecnica.ytefas.model.tables.common import person_contracts, persons
 
 
 # All test coroutines will be treated as marked

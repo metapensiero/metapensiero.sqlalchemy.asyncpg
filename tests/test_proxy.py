@@ -28,7 +28,7 @@ async def test_metadata(connection):
     assert 'person_id' in byname
 
     assert byname['name']['label'] == 'User name'
-    assert byname['person_id']['foreign_keys'] == ('risk.persons.id',)
+    assert byname['person_id']['foreign_keys'] == ('common.persons.id',)
 
 
 async def test_plain(connection):
@@ -82,8 +82,8 @@ async def test_filters(connection):
     proxy = AsyncpgProxiedQuery(users.select())
 
     result = await proxy(connection, filters=[dict(property="name",
-                                            value="titolare_ca",
-                                            operator="=")])
+                                                   value="titolare_ca",
+                                                   operator="=")])
 
     assert len(result) == 1
     assert result[0]['name'] == 'titolare_ca'
