@@ -2,8 +2,8 @@
 # :Project:   metapensiero.sqlalchemy.asyncpg -- Class-hic interface
 # :Created:   ven 24 mar 2017 08:15:50 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
-# :License:   No License
-# :Copyright: © 2017 Arstecnica s.r.l.
+# :License:   GNU General Public License version 3 or later
+# :Copyright: © 2017 Lele Gaifax
 #
 
 from .funcs import compile, execute, fetchall, fetchone, prepare, scalar

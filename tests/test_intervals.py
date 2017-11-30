@@ -2,8 +2,8 @@
 # :Project:   metapensiero.sqlalchemy.asyncpg -- Tests on interval data type
 # :Created:   mar 06 giu 2017 11:41:49 CEST
 # :Author:    Lele Gaifax <lele@metapensiero.it>
-# :License:   No License
-# :Copyright: © 2017 Arstecnica s.r.l.
+# :License:   GNU General Public License version 3 or later
+# :Copyright: © 2017 Lele Gaifax
 #
 
 import pytest

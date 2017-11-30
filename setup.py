@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # :Project:   metapensiero.sqlalchemy.asyncpg -- SQLAlchemy adaptor for asyncpg
 # :Created:   Tue 20 Dec 2016 21:17:12 CET
-# :Author:    Lele Gaifax <lele@arstecnica.it>
-# :License:   No license
-# :Copyright: © 2016, 2017 Arstecnica s.r.l.
+# :Author:    Lele Gaifax <lele@metapensiero.it>
+# :License:   GNU General Public License version 3 or later
+# :Copyright: © 2016, 2017 Lele Gaifax
 #
 
 import os
@@ -27,7 +27,7 @@ setup(
     long_description=README + '\n\n' + CHANGES,
 
     author="Lele Gaifax",
-    author_email="lele@arstecnica.it",
+    author_email="lele@metapensiero.it",
 
     license="GPLv3+",
     classifiers=[

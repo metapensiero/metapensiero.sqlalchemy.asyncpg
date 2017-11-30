@@ -2,8 +2,8 @@
 .. :Project:   metapensiero.sqlalchemy.asyncpg -- Class-hic interface
 .. :Created:   ven 14 lug 2017 16:06:43 CEST
 .. :Author:    Lele Gaifax <lele@metapensiero.it>
-.. :License:   No License
-.. :Copyright: © 2017 Arstecnica s.r.l.
+.. :License:   GNU General Public License version 3 or later
+.. :Copyright: © 2017 Lele Gaifax
 ..
 
 ==============================================

@@ -2,8 +2,8 @@
 # :Project:   metapensiero.sqlalchemy.asyncpg -- Variant of metapensiero.sqlalchemy.proxy
 # :Created:   mer 11 gen 2017 10:16:27 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
-# :License:   No License
-# :Copyright: © 2017 Arstecnica s.r.l.
+# :License:   GNU General Public License version 3 or later
+# :Copyright: © 2017 Lele Gaifax
 #
 
 from logging import getLogger

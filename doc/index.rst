@@ -2,8 +2,8 @@
 .. :Project:   metapensiero.sqlalchemy.asyncpg -- Documentation
 .. :Created:   mer 21 dic 2016 11:49:21 CET
 .. :Author:    Lele Gaifax <lele@metapensiero.it>
-.. :License:   No License
-.. :Copyright: © 2016, 2017 Arstecnica s.r.l.
+.. :License:   GNU General Public License version 3 or later
+.. :Copyright: © 2016, 2017 Lele Gaifax
 ..
 
 ================================

@@ -2,8 +2,8 @@
 # :Project:   metapensiero.sqlalchemy.asyncpg -- Specialized dialect
 # :Created:   mar 20 dic 2016 21:23:47 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
-# :License:   No License
-# :Copyright: © 2016, 2017 Arstecnica s.r.l.
+# :License:   GNU General Public License version 3 or later
+# :Copyright: © 2016, 2017 Lele Gaifax
 #
 
 import re

@@ -2,8 +2,8 @@
 # :Project:   metapensiero.sqlalchemy.asyncpg -- pytest configuration
 # :Created:   mer 21 dic 2016 12:37:39 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
-# :License:   No License
-# :Copyright: © 2016, 2017 Arstecnica s.r.l.
+# :License:   GNU General Public License version 3 or later
+# :Copyright: © 2016, 2017 Lele Gaifax
 #
 
 from os import environ

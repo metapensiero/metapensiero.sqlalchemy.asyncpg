@@ -2,8 +2,8 @@
 # :Project:   metapensiero.sqlalchemy.asyncpg -- Custom types
 # :Created:   lun 10 lug 2017 09:52:36 CEST
 # :Author:    Lele Gaifax <lele@metapensiero.it>
-# :License:   No License
-# :Copyright: © 2017 Arstecnica s.r.l.
+# :License:   GNU General Public License version 3 or later
+# :Copyright: © 2017 Lele Gaifax
 #
 
 from collections.abc import Hashable

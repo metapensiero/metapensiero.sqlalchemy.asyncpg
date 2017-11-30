@@ -2,8 +2,8 @@
 # :Project:   metapensiero.sqlalchemy.asyncpg -- See https://github.com/MagicStack/asyncpg/issues/32
 # :Created:   gio 22 dic 2016 11:27:52 CET
 # :Author:    Lele Gaifax <lele@metapensiero.it>
-# :License:   No License
-# :Copyright: © 2016, 2017 Arstecnica s.r.l.
+# :License:   GNU General Public License version 3 or later
+# :Copyright: © 2016, 2017 Lele Gaifax
 #
 
 from datetime import date, timedelta

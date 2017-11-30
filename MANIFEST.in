@@ -1,3 +1,3 @@
 include *.txt *.rst Makefile*
 recursive-include doc *.rst
-recursive-include src/arstecnica *.py
+recursive-include src/metapensiero *.py
