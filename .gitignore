@@ -2,6 +2,7 @@
 *.egg-info
 *.mo
 *.py[cod]
+/.cache/
 /.coverage
 /.emacs.desktop.lock
 /build/

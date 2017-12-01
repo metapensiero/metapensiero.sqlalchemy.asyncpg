@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+# :Project:   metapensiero.sqlalchemy.asyncpg -- Test requirements
+# :Created:   ven 01 dic 2017 09:33:18 CET
+# :Author:    Lele Gaifax <lele@metapensiero.it>
+# :License:   GNU General Public License version 3 or later
+# :Copyright: © 2017 Lele Gaifax
+#
+
+coverage==4.4.2
+pytest-cov==2.5.1
+pytest==3.3.0
+pytest-asyncio==0.8.0

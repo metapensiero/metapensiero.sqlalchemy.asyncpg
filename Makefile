@@ -6,6 +6,22 @@
 # :Copyright: © 2016, 2017 Lele Gaifax
 #
 
-all: help
+export TOPDIR := $(CURDIR)
+export VENVDIR := $(TOPDIR)/env
+export PYTHON := $(VENVDIR)/bin/python
+export SHELL := /bin/bash
+export SYS_PYTHON := $(shell which python3.6 || which python3)
+
+all: virtualenv help
+
+help::
+	@printf "check\n\trun the test suite\n"
+
+PYTEST = $(VENVDIR)/bin/pytest $(PYTEST_OPTIONS)
+
+.PHONY: check
+check:
+	$(PYTEST) tests/
 
 include Makefile.release
+include Makefile.virtualenv
