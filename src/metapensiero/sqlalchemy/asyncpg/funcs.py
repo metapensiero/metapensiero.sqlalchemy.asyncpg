@@ -74,10 +74,10 @@ def _log_sql_statement(connection, operation, sql, args, logf=logger.debug):
     from asyncpg.pool import PoolConnectionProxy
     from pg_query import prettify
     from pg_query.printer import get_printer_for_node_tag, node_printer
-    import pg_query.printers.sql  # noqa
+    import pg_query.printers.dml  # noqa
 
     try:
-        orig_paramref_printer = get_printer_for_node_tag('ParamRef')
+        orig_paramref_printer = get_printer_for_node_tag(None, 'ParamRef')
         try:
             @node_printer('ParamRef', override=True)
             def replace_param_ref(node, output):
