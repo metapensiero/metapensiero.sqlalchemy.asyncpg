@@ -9,12 +9,13 @@
 from .connection import Connection
 from .funcs import (UnexpectedResultError, compile, execute, fetchall,
                     fetchone, prepare, scalar)
-from .types import Interval, json_decode, json_encode, register_custom_codecs
+from .types import Interval, Range, json_decode, json_encode, register_custom_codecs
 
 
 __all__ = (
     'Connection',
     'Interval',
+    'Range',
     'UnexpectedResultError',
     'compile',
     'execute',
