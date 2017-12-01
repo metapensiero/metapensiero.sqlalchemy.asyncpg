@@ -4,6 +4,7 @@
 *.py[cod]
 /.cache/
 /.coverage
+/doc/_build/
 /.emacs.desktop.lock
 /build/
 /dist/

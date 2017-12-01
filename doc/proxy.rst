@@ -11,4 +11,5 @@
 =================================
 
 .. automodule:: metapensiero.sqlalchemy.asyncpg.proxy
+   :synopsis: Asyncpg variant of ProxiedQuery
    :members:

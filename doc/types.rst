@@ -11,4 +11,5 @@
 ==============
 
 .. automodule:: metapensiero.sqlalchemy.asyncpg.types
+   :synopsis: Custom types
    :members:

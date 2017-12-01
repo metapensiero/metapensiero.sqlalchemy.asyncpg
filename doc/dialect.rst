@@ -11,4 +11,5 @@
 ============================
 
 .. automodule:: metapensiero.sqlalchemy.asyncpg.dialect
+   :synopsis: Custom SA dialect
    :members:

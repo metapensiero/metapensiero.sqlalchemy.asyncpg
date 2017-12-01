@@ -11,4 +11,5 @@
 ==============================================
 
 .. automodule:: metapensiero.sqlalchemy.asyncpg.connection
+   :synopsis: Class-hic interface to low level functions
    :members:

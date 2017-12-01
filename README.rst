@@ -25,4 +25,5 @@ ProxiedQuery__.
 
 __ https://github.com/MagicStack/asyncpg
 __ https://github.com/CanopyTax/asyncpgsa
-__ http://metapensierosqlalchemyproxy.readthedocs.io/en/latest/core.html#metapensiero.sqlalchemy.proxy.core.ProxiedQuery
+__ http://metapensierosqlalchemyproxy.readthedocs.io/en/latest/\
+   core.html#metapensiero.sqlalchemy.proxy.core.ProxiedQuery

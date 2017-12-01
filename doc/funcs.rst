@@ -11,4 +11,5 @@
 ===========
 
 .. automodule:: metapensiero.sqlalchemy.asyncpg.funcs
+   :synopsis: Low level functions
    :members:

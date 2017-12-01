@@ -18,12 +18,22 @@ ProxiedQuery__.
 
 __ https://magicstack.github.io/asyncpg/devel/
 __ https://github.com/CanopyTax/asyncpgsa
-__ http://metapensierosqlalchemyproxy.readthedocs.io/en/latest/core.html#metapensiero.sqlalchemy.proxy.core.ProxiedQuery
+__ http://metapensierosqlalchemyproxy.readthedocs.io/en/latest/\
+   core.html#metapensiero.sqlalchemy.proxy.core.ProxiedQuery
 
 .. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
    dialect
    funcs
    connection
    types
    proxy
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

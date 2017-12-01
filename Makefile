@@ -23,5 +23,12 @@ PYTEST = $(VENVDIR)/bin/pytest $(PYTEST_OPTIONS)
 check:
 	$(PYTEST) tests/
 
+help::
+	@printf "doc\n\tBuild Sphinx documentation\n"
+
+.PHONY: doc
+doc:
+	@$(MAKE) -C doc/ --no-print-directory html
+
 include Makefile.release
 include Makefile.virtualenv
