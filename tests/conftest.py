@@ -6,42 +6,88 @@
 # :Copyright: © 2016, 2017 Lele Gaifax
 #
 
-from os import environ
-from sys import exit
+import asyncio
 
 import asyncpg
 import pytest
+import sqlalchemy as sa
+import sqlalchemy.dialects.postgresql as sapg
 
 from metapensiero.sqlalchemy.asyncpg import Connection, register_custom_codecs
-from arstecnica.ytefas.model.utils import assert_database_is_up
 
 
-DB_HOST = environ['DATABASE_HOST']
-DB_PORT = environ['DATABASE_PORT']
-DB_NAME = environ['DATABASE_NAME']
-DB_USER = environ['DATABASE_USER']
-DB_PWD = environ['DATABASE_PASSWORD']
+@pytest.fixture(scope='session')
+def event_loop():
+    return asyncio.get_event_loop()
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def pool(event_loop):
-    db_url = f"postgresql://{DB_USER}:{DB_PWD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    event_loop = asyncio.get_event_loop()
+    adminconn = event_loop.run_until_complete(
+        asyncpg.connect(database='postgres', loop=event_loop))
+    event_loop.run_until_complete(adminconn.execute(
+        'CREATE DATABASE sasyncpg_test'))
+
+    conn = event_loop.run_until_complete(asyncpg.connect(
+        database='sasyncpg_test', loop=event_loop))
+    event_loop.run_until_complete(conn.execute('CREATE EXTENSION "hstore"'))
+    event_loop.run_until_complete(conn.execute(
+        "CREATE TABLE users ("
+        " id serial NOT NULL PRIMARY KEY,"
+        " name varchar(25) NOT NULL,"
+        " password varchar(25) NOT NULL,"
+        " validity daterange,"
+        " max_renew interval,"
+        " options hstore,"
+        " details jsonb,"
+        " CONSTRAINT uk_users UNIQUE (name)"
+        ");"
+        "INSERT INTO users (name, password, validity, max_renew) VALUES"
+        " ('admin', 'nimda', '(-INFINITY,INFINITY)', NULL),"
+        " ('secretary', 'secret', '[2017-11-30,2018-11-30]', '1 year 2 months 3 days'),"
+        " ('ceo', 'ultrasecret', '[2017-11-01,INFINITY]', NULL),"
+        " ('inter', 'retni', '[2017-11-30,2017-12-31]', '1 month')"
+    ))
+    event_loop.run_until_complete(conn.close())
+
     pool = event_loop.run_until_complete(asyncpg.create_pool(
-        db_url,
+        database='sasyncpg_test',
         min_size=1,
         max_size=10,
         init=register_custom_codecs,
+        loop=event_loop,
     ))
-    yield pool
-    event_loop.run_until_complete(pool.close())
+
+    try:
+        yield pool
+    finally:
+        event_loop.run_until_complete(pool.close())
+        event_loop.run_until_complete(adminconn.execute(
+            'DROP DATABASE sasyncpg_test'))
+        event_loop.run_until_complete(adminconn.close())
 
 
 @pytest.fixture
-def connection(pool, event_loop):
+def connection(event_loop, pool):
     c = event_loop.run_until_complete(pool.acquire())
-    yield Connection(c)
-    event_loop.run_until_complete(pool.release(c))
+    try:
+        yield Connection(c)
+    finally:
+        event_loop.run_until_complete(pool.release(c))
 
 
-if not assert_database_is_up(DB_HOST, int(DB_PORT)):
-    exit(2)
+users_t = sa.Table('users', sa.MetaData(),
+                   sa.Column('id', sa.types.Integer, primary_key=True),
+                   sa.Column('name', sa.types.String, nullable=False,
+                             info=dict(label='User name')),
+                   sa.Column('password', sa.types.String, nullable=False),
+                   sa.Column('validity', sapg.DATERANGE, nullable=True),
+                   sa.Column('max_renew', sa.types.Interval, nullable=True),
+                   sa.Column('options', sapg.HSTORE, nullable=True),
+                   sa.Column('details', sapg.JSONB, nullable=True))
+
+
+@pytest.fixture
+def users():
+    return users_t

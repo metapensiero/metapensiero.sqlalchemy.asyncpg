@@ -140,3 +140,10 @@ async def test_compile_update_bind_params():
     assert args[0] == 'lele'
     assert isinstance(args[1], datetime)
     assert args[2] == 1
+
+
+async def test_compile_unknown_type():
+    query = sa.select([sa.func.foo(sa.bindparam('bar'))])
+    sql, args = compile(query, named_args={'bar': 1})
+    assert sql.replace('\n', '') == 'SELECT foo($1) AS foo_1'
+    assert args[0] == 1

@@ -6,54 +6,75 @@
 # :Copyright: © 2016, 2017 Lele Gaifax
 #
 
+import logging
 import pytest
 import sqlalchemy as sa
 
 from metapensiero.sqlalchemy import asyncpg
 
-from arstecnica.ytefas.model.tables.auth import users
-
 
 # All test coroutines will be treated as marked
-pytestmark = pytest.mark.asyncio(forbid_global_loop=True)
+pytestmark = pytest.mark.asyncio
 
 
-async def test_scalar(pool):
-    q = sa.select([users.c.name]) \
-        .where(users.c.name == 'segretaria_ca')
+async def test_scalar(pool, users):
+    q = sa.select([users.c.password]).where(users.c.name == 'secretary')
     async with pool.acquire() as conn:
-        assert await asyncpg.scalar(conn, q) == 'segretaria_ca'
+        assert await asyncpg.scalar(conn, q) == 'secret'
 
 
-async def test_scalar_2nd_column(pool):
-    q = sa.select([users.c.person_id, users.c.name]) \
-        .where(users.c.name == 'segretaria_ca')
+async def test_scalar_2nd_column(pool, users):
+    q = (sa.select([users.c.id, users.c.name])
+         .where(users.c.name == 'secretary'))
     async with pool.acquire() as conn:
-        assert await asyncpg.scalar(conn, q, column=1) == 'segretaria_ca'
+        assert await asyncpg.scalar(conn, q, column=1) == 'secretary'
 
 
-async def test_scalar_named_args(pool):
-    q = sa.select([sa.text('user_id')],
-                  from_obj=sa.text('auth.login(:user, :password)'))
+async def test_scalar_named_args(pool, users):
+    q = (sa.select([users.c.password])
+         .where(users.c.name == sa.bindparam('name'))
+         .where(users.c.password == sa.bindparam('password')))
     async with pool.acquire() as conn:
         assert await asyncpg.scalar(conn, q,
-                                    named_args=dict(user='admin',
+                                    named_args=dict(name='admin',
                                                     password='nimda'))
 
 
-async def test_fetchall(pool):
-    q = sa.select([users]) \
-        .where(users.c.name.like('%_ca'))
+async def test_fetchall(pool, users):
+    q = sa.select([users])
     async with pool.acquire() as conn:
         result = await asyncpg.fetchall(conn, q)
         assert isinstance(result, list)
-        assert len(result) == 3
+        assert len(result) == 4
 
 
-async def test_fetchone(pool):
-    q = sa.select([users]) \
-        .where(users.c.name.like('%_ca'))
+async def test_fetchone(pool, users):
+    q = (sa.select([users])
+         .where(users.c.name.like('secr%')))
     async with pool.acquire() as conn:
         result = await asyncpg.fetchone(conn, q)
         assert type(result).__name__ == 'Record'
-        assert result['name'].endswith('_ca')
+        assert result['name'] == 'secretary'
+
+
+async def test_slow_select(pool):
+    from metapensiero.sqlalchemy.asyncpg.funcs import logger
+
+    class MyLogHandler(logging.Handler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.logs = []
+
+        def handle(self, record):
+            self.logs.append(record)
+
+    handler = MyLogHandler()
+    logger.addHandler(handler)
+    try:
+        async with pool.acquire() as conn:
+            await asyncpg.execute(conn, "SELECT pg_sleep(0.2)",
+                                  warn_slow_query_threshold=0.1)
+        assert len(handler.logs) == 2
+        assert handler.logs[1].levelname == 'WARNING'
+    finally:
+        logger.removeHandler(handler)

@@ -31,7 +31,7 @@ setup(
 
     license="GPLv3+",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 3 - Alpha",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
@@ -53,8 +53,11 @@ setup(
     ],
     extras_require={
         'dev': [
-            'metapensiero.tool.bump_version',
-            'readme_renderer',
+            'metapensiero.tool.bump-version',
+            'pytest',
+            'pytest-asyncio',
+            'pytest-cov',
+            'readme-renderer',
         ]
     },
 )

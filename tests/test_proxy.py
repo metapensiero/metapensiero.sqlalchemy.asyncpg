@@ -9,14 +9,13 @@
 import pytest
 
 from metapensiero.sqlalchemy.asyncpg.proxy import AsyncpgProxiedQuery
-from arstecnica.ytefas.model.tables.auth import users
 
 
 # All test coroutines will be treated as marked
-pytestmark = pytest.mark.asyncio(forbid_global_loop=True)
+pytestmark = pytest.mark.asyncio
 
 
-async def test_metadata(connection):
+async def test_metadata(connection, users):
     proxy = AsyncpgProxiedQuery(users.select())
 
     result = await proxy(connection, result=False, metadata='metadata')
@@ -25,21 +24,20 @@ async def test_metadata(connection):
 
     byname = {finfo['name']: finfo for finfo in result['metadata']['fields']}
     assert 'name' in byname
-    assert 'person_id' in byname
+    assert 'id' in byname
 
     assert byname['name']['label'] == 'User name'
-    assert byname['person_id']['foreign_keys'] == ('common.persons.id',)
 
 
-async def test_plain(connection):
+async def test_plain(connection, users):
     proxy = AsyncpgProxiedQuery(users.select())
 
     result = await proxy(connection)
 
-    assert len(result) == 5
+    assert len(result) == 4
 
 
-async def test_limit(connection):
+async def test_limit(connection, users):
     proxy = AsyncpgProxiedQuery(users.select())
 
     result = await proxy(connection, limit=1)
@@ -48,7 +46,7 @@ async def test_limit(connection):
     assert 'id' in result[0]
 
 
-async def test_count(connection):
+async def test_count(connection, users):
     proxy = AsyncpgProxiedQuery(users.select())
 
     result = await proxy(connection, result='rows', count='count')
@@ -57,33 +55,33 @@ async def test_count(connection):
     assert len(result['rows']) == result['count']
 
 
-async def test_sort(connection):
+async def test_sort(connection, users):
     proxy = AsyncpgProxiedQuery(users.select())
 
     result = await proxy(connection,
                          sorters='[{"property":"name","direction":"DESC"}]')
 
-    assert len(result) == 5
-    assert result[0]['name'] == 'titolare_ca'
+    assert len(result) == 4
+    assert result[0]['name'] == 'secretary'
 
     result = await proxy(connection, sort='[{"property":"name"}]')
 
-    assert len(result) == 5
+    assert len(result) == 4
     assert result[0]['name'] == 'admin'
 
     result = await proxy(connection,
                          sorters=[dict(property="name", direction="ASC")])
 
-    assert len(result) == 5
+    assert len(result) == 4
     assert result[0]['name'] == 'admin'
 
 
-async def test_filters(connection):
+async def test_filters(connection, users):
     proxy = AsyncpgProxiedQuery(users.select())
 
     result = await proxy(connection, filters=[dict(property="name",
-                                                   value="titolare_ca",
+                                                   value="secretary",
                                                    operator="=")])
 
     assert len(result) == 1
-    assert result[0]['name'] == 'titolare_ca'
+    assert result[0]['name'] == 'secretary'
