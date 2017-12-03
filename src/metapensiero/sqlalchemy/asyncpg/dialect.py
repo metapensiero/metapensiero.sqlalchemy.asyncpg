@@ -18,7 +18,7 @@ compiler.BIND_TEMPLATES['numeric'] = '$[_POSITION]'
 
 
 class PGCompiler_asyncpg(PGCompiler_psycopg2):
-    """Custom SA PostgreSQL compiler that produces param placeholder
+    """Custom SA PostgreSQL compiler that produces explicitly typed parameter placeholders
     compatible with asyncpg.
 
     This solves https://github.com/MagicStack/asyncpg/issues/32.
@@ -26,20 +26,18 @@ class PGCompiler_asyncpg(PGCompiler_psycopg2):
 
     def _apply_numbered_params(self):
         idx = 0
-        names = self.positiontup
-        binds = self.binds
-        process = self.dialect.type_compiler.process
 
-        def replace(match):
+        def replace(match, _names=self.positiontup, _binds=self.binds,
+                    _render_type=self.dialect.type_compiler.process):
             nonlocal idx
-            name = names[idx]
+            name = _names[idx]
             idx += 1
-            param = binds[name]
+            param = _binds[name]
             type = param.type
             if isinstance(type, NullType):
                 return str(idx)
             else:
-                return '%s::%s' % (idx, process(type))
+                return '%s::%s' % (idx, _render_type(type))
 
         self.string = re.sub(r'\[_POSITION\]', replace, self.string)
 
