@@ -1,3 +1,4 @@
-include *.txt *.rst Makefile*
-recursive-include doc *.rst
+include .dir-locals.el *.txt *.rst Makefile*
+include tests/*.py
+recursive-include doc Makefile conf.py *.rst
 recursive-include src/metapensiero *.py
