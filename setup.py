@@ -47,6 +47,7 @@ setup(
     install_requires=[
         'asyncpg',
         'metapensiero.sqlalchemy.proxy',
+        'nssjson',
         'pg-query',
         'setuptools',
         'sqlalchemy',
