@@ -3,20 +3,21 @@ stages:
   - test
   - various
 
-test:3.5:
-  stage: test
-  image: python:3.5
-  services:
-    - postgres:10.1
-  variables:
-    POSTGRES_USER: runner
-    POSTGRES_PASSWORD: runner
-    PG_HOST: postgres
-  script:
-    - pip install -r requirements.txt
-    - pip install .
-    - pytest
-  coverage: '/\d+\%\s*$/'
+# disabled until we decide what to do with py3.5, see also setup.py classifiers
+# test:3.5:
+#   stage: test
+#   image: python:3.5
+#   services:
+#     - postgres:10.1
+#   variables:
+#     POSTGRES_USER: runner
+#     POSTGRES_PASSWORD: runner
+#     PG_HOST: postgres
+#   script:
+#     - pip install -r requirements.txt
+#     - pip install .
+#     - pytest
+#   coverage: '/\d+\%\s*$/'
 
 test:3.6_pg10:
   stage: test
