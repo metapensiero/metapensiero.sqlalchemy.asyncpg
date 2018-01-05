@@ -7,6 +7,7 @@
 #
 
 import asyncio
+import os
 
 import asyncpg
 import pytest
@@ -14,6 +15,15 @@ import sqlalchemy as sa
 import sqlalchemy.dialects.postgresql as sapg
 
 from metapensiero.sqlalchemy.asyncpg import Connection, register_custom_codecs
+
+# gitlab ci configuration
+EXTENDED_CONN_ARGS = {}
+if 'POSTGRES_USER' in os.environ:
+    EXTENDED_CONN_ARGS['user'] = os.environ['POSTGRES_USER']
+if 'POSTGRES_PASSWORD' in os.environ:
+    EXTENDED_CONN_ARGS['password'] = os.environ['POSTGRES_PASSWORD']
+if 'PG_HOST' in os.environ:
+    EXTENDED_CONN_ARGS['host'] = os.environ['PG_HOST']
 
 
 @pytest.fixture(scope='session')
@@ -24,8 +34,10 @@ def event_loop():
 @pytest.fixture(scope='session')
 def pool(event_loop):
     event_loop = asyncio.get_event_loop()
+    conn_args = dict(database='postgres', loop=event_loop)
+    conn_args.update(EXTENDED_CONN_ARGS)
     adminconn = event_loop.run_until_complete(
-        asyncpg.connect(database='postgres', loop=event_loop))
+        asyncpg.connect(**conn_args))
     event_loop.run_until_complete(adminconn.execute(
         'CREATE DATABASE sasyncpg_test'))
 
