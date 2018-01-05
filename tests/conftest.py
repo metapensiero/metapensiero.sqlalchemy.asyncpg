@@ -72,7 +72,7 @@ def pool(event_loop):
         loop=event_loop,
     )
     conn_args.update(EXTENDED_CONN_ARGS)
-    pool = event_loop.run_until_complete(asyncpg.create_pool(**conn_args)
+    pool = event_loop.run_until_complete(asyncpg.create_pool(**conn_args))
 
     try:
         yield pool
