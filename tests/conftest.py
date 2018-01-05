@@ -43,7 +43,7 @@ def pool(event_loop):
 
     conn_args = dict(database='sasyncpg_test', loop=event_loop)
     conn_args.update(EXTENDED_CONN_ARGS)
-    conn = event_loop.run_until_complete(asyncpg.connect(**conn_args)
+    conn = event_loop.run_until_complete(asyncpg.connect(**conn_args))
     event_loop.run_until_complete(conn.execute('CREATE EXTENSION "hstore"'))
     event_loop.run_until_complete(conn.execute(
         "CREATE TABLE users ("
