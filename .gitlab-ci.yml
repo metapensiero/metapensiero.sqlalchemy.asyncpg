@@ -6,6 +6,12 @@ stages:
 test:
   stage: test
   image: python:3.6
+  services:
+    - postgres:10.1
+  variables:
+    POSTGRES_USER: runner
+    POSTGRES_PASSWORD: runner
+    PG_HOST: postgres
   script:
     - pip install -r requirements.txt
     - pip install .
