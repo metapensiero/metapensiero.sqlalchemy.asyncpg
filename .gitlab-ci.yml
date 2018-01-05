@@ -47,7 +47,6 @@ test:3.6_pg9:
     - pip install -r requirements.txt
     - pip install .
     - pytest
-  coverage: '/\d+\%\s*$/'
 
 wheel:
   stage: various
