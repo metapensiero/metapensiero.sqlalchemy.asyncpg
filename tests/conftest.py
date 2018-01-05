@@ -64,13 +64,15 @@ def pool(event_loop):
     ))
     event_loop.run_until_complete(conn.close())
 
-    pool = event_loop.run_until_complete(asyncpg.create_pool(
+    conn_args = dict(
         database='sasyncpg_test',
         min_size=1,
         max_size=10,
         init=register_custom_codecs,
         loop=event_loop,
-    ))
+    )
+    conn_args.update(EXTENDED_CONN_ARGS)
+    pool = event_loop.run_until_complete(asyncpg.create_pool(**conn_args)
 
     try:
         yield pool
