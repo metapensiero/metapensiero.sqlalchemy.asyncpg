@@ -63,6 +63,7 @@ pages:
   script:
     - pip install -r requirements.txt
     - pip install .
+    - mkdir -p public
     - cd doc ; make html
     - mv build/html/ ../public/
   artifacts:
