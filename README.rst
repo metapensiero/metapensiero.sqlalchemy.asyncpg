@@ -6,6 +6,17 @@
 .. :Copyright: © 2016, 2017 Lele Gaifax
 ..
 
+.. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/pipeline.svg
+   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
+   :align: left
+   :alt: tests status
+
+.. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/coverage.svg
+   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
+   :align: left
+   :alt: tests coverage
+
+
 =================================
  metapensiero.sqlalchemy.asyncpg
 =================================
