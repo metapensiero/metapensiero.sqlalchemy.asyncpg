@@ -1,0 +1,34 @@
+---
+stages:
+  - test
+  - various
+
+test:
+  stage: test
+  image: python:3.6
+  script:
+    - pip install -r requirements.txt
+    - pip install .
+    - pytest
+
+wheel:
+  stage: various
+  image: python:3.6
+  script:
+    - python setup.py bdist_wheel
+  artifacts:
+    paths:
+      - dist/*.whl
+
+pages:
+  stage: various
+  script:
+    - pip install -r requirements.txt
+    - pip install .
+    - cd doc ; make html
+    - mv build/html/ ../public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
