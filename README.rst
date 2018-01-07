@@ -42,10 +42,10 @@ the actual *values*, and supplies an asyncpg variant of `metapensiero.sqlalchemy
 __ https://pypi.python.org/pypi/asyncpg
 __ https://pypi.python.org/pypi/asyncpgsa
 __ https://github.com/MagicStack/asyncpg/issues/32
+__ http://pg-query.readthedocs.io/en/latest/
 __ https://pypi.python.org/pypi/metapensiero.sqlalchemy.proxy
 __ http://metapensierosqlalchemyproxy.readthedocs.io/en/latest/\
    core.html#metapensiero.sqlalchemy.proxy.core.ProxiedQuery
-__ http://pg-query.readthedocs.io/en/latest/
 
 
 Typical usage
