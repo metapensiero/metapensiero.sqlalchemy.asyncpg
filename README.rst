@@ -13,9 +13,19 @@
 SQLAlchemy adaptor for asyncpg
 ==============================
 
- :author: Lele Gaifax
- :contact: lele@metapensiero.it
- :license: GNU General Public License version 3 or later
+:Author: Lele Gaifax
+:Contact: lele@metapensiero.it
+:License: `GNU General Public License version 3 or later`__
+:Status: |tests| |coverage|
+
+__ https://www.gnu.org/licenses/gpl.html
+.. |tests| image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/pipeline.svg
+   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
+   :alt: tests status
+.. |coverage| image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/coverage.svg
+   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
+   :alt: tests coverage
+
 
 This is a Python 3 package, spin-off from the proprietary ``Ytefas`` application, that
 implements the ability of executing SQLAlchemy core statements through asyncpg__, in a
@@ -23,27 +33,22 @@ cleaner way than asyncpgsa__ (I'm biased, of course 😜): the main difference i
 uses explicitly typed parameter placeholders, to avoid `the problem`__ that initially
 prompted me to write this package.
 
+__ https://pypi.python.org/pypi/asyncpg
+__ https://pypi.python.org/pypi/asyncpgsa
+__ https://github.com/MagicStack/asyncpg/issues/32
+
 It emits ``DEBUG`` logs with `prettified`__ SQL statements, with *parameters* resolved to
 the actual *values*, and supplies an asyncpg variant of `metapensiero.sqlalchemy.proxy`__
 \ 's ProxiedQuery__.
 
-
-.. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/pipeline.svg
-   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
-   :alt: tests status
-
-.. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/coverage.svg
-   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
-   :alt: tests coverage
-
-
-__ https://pypi.python.org/pypi/asyncpg
-__ https://pypi.python.org/pypi/asyncpgsa
-__ https://github.com/MagicStack/asyncpg/issues/32
 __ http://pg-query.readthedocs.io/en/latest/
 __ https://pypi.python.org/pypi/metapensiero.sqlalchemy.proxy
 __ http://metapensierosqlalchemyproxy.readthedocs.io/en/latest/\
    core.html#metapensiero.sqlalchemy.proxy.core.ProxiedQuery
+
+Latest documentation is automatically rendered here__.
+
+__ https://metapensiero.gitlab.io/metapensiero.sqlalchemy.asyncpg/
 
 
 Typical usage
