@@ -30,12 +30,10 @@ the actual *values*, and supplies an asyncpg variant of `metapensiero.sqlalchemy
 
 .. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/pipeline.svg
    :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
-   :align: left
    :alt: tests status
 
 .. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/coverage.svg
    :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
-   :align: left
    :alt: tests coverage
 
 
