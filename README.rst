@@ -3,7 +3,7 @@
 .. :Created:   Tue 20 Dec 2016 21:17:12 CET
 .. :Author:    Lele Gaifax <lele@metapensiero.it>
 .. :License:   GNU General Public License version 3 or later
-.. :Copyright: © 2016, 2017 Lele Gaifax
+.. :Copyright: © 2016, 2017, 2018 Lele Gaifax
 ..
 
 .. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/pipeline.svg
