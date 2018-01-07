@@ -6,17 +6,6 @@
 .. :Copyright: © 2016, 2017, 2018 Lele Gaifax
 ..
 
-.. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/pipeline.svg
-   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
-   :align: left
-   :alt: tests status
-
-.. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/coverage.svg
-   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
-   :align: left
-   :alt: tests coverage
-
-
 =================================
  metapensiero.sqlalchemy.asyncpg
 =================================
@@ -37,6 +26,17 @@ prompted me to write this package.
 It emits ``DEBUG`` logs with `prettified`__ SQL statements, with *parameters* resolved to
 the actual *values*, and supplies an asyncpg variant of `metapensiero.sqlalchemy.proxy`__
 \ 's ProxiedQuery__.
+
+
+.. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/pipeline.svg
+   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
+   :align: left
+   :alt: tests status
+
+.. image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/coverage.svg
+   :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
+   :align: left
+   :alt: tests coverage
 
 
 __ https://pypi.python.org/pypi/asyncpg
