@@ -13,10 +13,10 @@
 SQLAlchemy adaptor for asyncpg
 ==============================
 
-:Author: Lele Gaifax
-:Contact: lele@metapensiero.it
-:License: `GNU General Public License version 3 or later`__
-:Status: |tests| |coverage|
+ :Author: Lele Gaifax
+ :Contact: lele@metapensiero.it
+ :License: `GNU General Public License version 3 or later`__
+ :Status: |tests| |coverage|
 
 __ https://www.gnu.org/licenses/gpl.html
 .. |tests| image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/pipeline.svg
@@ -25,7 +25,6 @@ __ https://www.gnu.org/licenses/gpl.html
 .. |coverage| image:: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/badges/master/coverage.svg
    :target: https://gitlab.com/metapensiero/metapensiero.sqlalchemy.asyncpg/commits/master
    :alt: tests coverage
-
 
 This is a Python 3 package, spin-off from the proprietary ``Ytefas`` application, that
 implements the ability of executing SQLAlchemy core statements through asyncpg__, in a
